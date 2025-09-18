@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@Auleaux.home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#home">
+        <img src="avl.svg" alt="studio logo" class="logo">
+      </a>
+      <nav class="nav">
+        <a href="#home">Home</a>
+        <a href="#gallery">Events</a>
+        <a href="#games">Games</a>
+        <a href="#updates">Updates</a>
+        <a href="#suggestions">Suggestions</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero Slider -->
+    <section id="gallery" class="hero-slider">
+      <div class="slides">
+        <div class="slide">
+          <img src="gallery1.jpg" alt="Event 1">
+          <div class="slide-overlay">
+            <h2>Event 1 Highlights</h2>
+            <p>Experience the best moments from our event.</p>
+          </div>
+        </div>
+
+        <div class="slide">
+          <video autoplay muted loop>
+            <source src="event1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <div class="slide-overlay">
+            <h2>Event 2 Video</h2>
+            <p>Watch the demo highlights in motion.</p>
+          </div>
+        </div>
+
+        <div class="slide">
+          <img src="gallery2.jpg" alt="Event 2">
+          <div class="slide-overlay">
+            <h2>Event 2 Moments</h2>
+            <p>Memorable moments captured beautifully.</p>
+          </div>
+        </div>
+      </div>
+      <button class="slider-btn prev">&#10094;</button>
+      <button class="slider-btn next">&#10095;</button>
+    </section>
+
+    <!-- Games Section -->
+    <section id="games" class="section container">
+      <header class="section-header">
+        <h2>Demo Game</h2>
+        <p class="small">Playable demo types for testing - 18 September 2025</p>
+      </header>
+
+      <div class="grid cards">
+        <article class="card">
+          <h3>After Fall-X</h3>
+          <p class="muted">Test demo V1.0.0</p>
+          <div class="card-actions">
+            <a class="btn small" href="#">Download</a>
+            <a class="link" href="#">Release Note</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section container contact">
+      <div class="contact-grid">
+        <div>
+          <h3>Contact</h3>
+          <p class="muted">Contact information</p>
+          <ul class="contact-list">
+            <li>Email: <strong>auleauxstudios@gmail.com</strong></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <small>© Auleaux Studios 2025</small>
+      <nav class="foot-nav">
+        <a href="#">Privacy policy</a>
+        <a href="#">Terms and conditions</a>
+        <a href="#">Home</a>
+        <a href="#">Games</a>
+        <a href="#">event</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- JS -->
+  <script>
+    // Smooth scroll for anchors
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', e=>{
+        const href = a.getAttribute('href');
+        if(href.length>1){
+          e.preventDefault();
+          document.querySelector(href).scrollIntoView({behavior:'smooth'});
+        }
+      });
+    });
+
+    // Slider functionality
+    const slides = document.querySelector('.slides');
+    const slideItems = document.querySelectorAll('.slide');
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+    let index = 0;
+
+    function showSlide(i){
+      if(i >= slideItems.length) index = 0;
+      if(i < 0) index = slideItems.length - 1;
+      slides.style.transform = `translateX(-${index * 100}%)`;
+    }
+
+    prevBtn.addEventListener('click', ()=>{ index--; showSlide(index); });
+    nextBtn.addEventListener('click', ()=>{ index++; showSlide(index); });
+
+    setInterval(()=>{ index++; showSlide(index); }, 6000);
+  </script>
+</body>
+</html>
