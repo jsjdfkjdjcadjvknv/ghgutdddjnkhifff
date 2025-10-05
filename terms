@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Terms & Conditions - Auleaux Studios</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <img src="avl.svg" alt="Auleaux Studios logo" class="logo">
+      </a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="updates.html">Updates</a>
+        <a href="suggestions.html">Suggestions</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section container">
+    <h1>Terms & Conditions</h1>
+    <p class="muted">Last updated: October 5, 2025</p>
+
+    <p>Welcome to Auleaux Studios! By accessing our website or games, you agree to the following terms and conditions. Please read them carefully.</p>
+
+    <h2>1. Use of Our Services</h2>
+    <p>Our content, games, and media are provided for entertainment and educational purposes. You agree not to use them for unlawful or harmful activities.</p>
+
+    <h2>2. Intellectual Property</h2>
+    <p>All logos, designs, code, and assets are owned by Auleaux Studios unless stated otherwise. Unauthorized copying, redistribution, or modification is prohibited.</p>
+
+    <h2>3. User Content</h2>
+    <p>By submitting feedback or suggestions, you grant Auleaux Studios permission to use them to improve our games and services without obligation or compensation.</p>
+
+    <h2>4. Disclaimer of Warranties</h2>
+    <p>Our services are provided “as is.” We make no warranties regarding uninterrupted availability or freedom from errors or viruses.</p>
+
+    <h2>5. Limitation of Liability</h2>
+    <p>Auleaux Studios is not liable for any direct or indirect damages resulting from the use of our products or website.</p>
+
+    <h2>6. Modifications</h2>
+    <p>We reserve the right to modify these Terms at any time. Continued use of our services implies acceptance of the latest version.</p>
+
+    <h2>7. Contact</h2>
+    <p>For questions regarding these Terms, contact us at <strong>auleauxstudios@gmail.com</strong>.</p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <small>© Auleaux Studios 2025</small>
+      <nav class="foot-nav">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="index.html">Home</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>
