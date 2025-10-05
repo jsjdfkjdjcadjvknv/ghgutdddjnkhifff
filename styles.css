@@ -1,3 +1,4 @@
+/* Base reset & typography */
 * {
   margin: 0;
   padding: 0;
@@ -6,24 +7,30 @@
 
 body {
   font-family: "Inter", sans-serif;
-  background: #0e0e10;
-  color: #f3f3f3;
-  line-height: 1.6;
+  background: #f5f5f7;
+  color: #333;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* HEADER */
-.site-header {
-  background: #141416;
-  border-bottom: 1px solid #252528;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
 .container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 1rem 1.5rem;
+}
+
+/* Header */
+.site-header {
+  background: #fff;
+  border-bottom: 1px solid #e2e2e5;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .header-inner {
@@ -32,155 +39,229 @@ body {
   justify-content: space-between;
 }
 
+.brand {
+  display: flex;
+  align-items: center;
+}
+
 .logo {
   height: 40px;
-  margin-right: 8px;
+  width: auto;
+  margin-right: 0.75rem;
 }
 
 .brand-text {
-  font-weight: 700;
-  font-size: 1.1rem;
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: #111;
 }
 
 .nav a {
-  color: #f3f3f3;
-  text-decoration: none;
-  margin-left: 1.2rem;
-  transition: 0.3s;
+  margin-left: 1.25rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #555;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
-.nav a:hover, .nav a.active {
-  color: #00eaff;
+.nav a:hover,
+.nav a.active {
+  color: #007aff;
+  transform: translateY(-2px);
 }
 
-/* HERO */
+/* Hero section */
 .hero {
-  background: linear-gradient(135deg, #121213, #1e1e24);
+  background: linear-gradient(135deg, #007aff, #00d1ff);
+  color: #fff;
   text-align: center;
-  padding: 8rem 1rem;
+  padding: 6rem 1rem;
 }
 
 .hero-content h1 {
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 800;
 }
 
-.highlight {
-  color: #00eaff;
+.hero-content p {
+  font-size: 1.25rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 
 .btn {
-  display: inline-block;
-  padding: 0.7rem 1.3rem;
+  padding: 0.75rem 1.5rem;
   border-radius: 8px;
-  text-decoration: none;
-  margin-top: 1rem;
-  transition: 0.3s;
+  font-weight: 600;
+  display: inline-block;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .btn.primary {
-  background: #00eaff;
-  color: #0e0e10;
-  font-weight: 600;
+  background: #fff;
+  color: #007aff;
 }
 
 .btn.primary:hover {
-  background: #00bcd4;
+  background: #e0f4ff;
+  transform: translateY(-2px);
 }
 
 .btn.secondary {
-  border: 1px solid #00eaff;
-  color: #00eaff;
+  background: transparent;
+  color: #007aff;
+  border: 2px solid #007aff;
 }
 
 .btn.secondary:hover {
-  background: #00eaff;
-  color: #0e0e10;
-}
-
-/* GALLERY */
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.2rem;
-  margin-top: 1.5rem;
-}
-
-.gallery-item img, .gallery-item video {
-  width: 100%;
-  border-radius: 10px;
-  object-fit: cover;
-}
-
-.section {
-  text-align: center;
-  padding: 4rem 1.5rem;
-}
-
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-.card {
-  background: #1a1a1d;
-  border-radius: 12px;
-  padding: 1.5rem;
-  transition: 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-
-.card-actions {
-  margin-top: 1rem;
-}
-
-input, textarea {
-  width: 100%;
-  padding: 0.7rem;
-  border: none;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  background: #1a1a1d;
+  background: #007aff;
   color: #fff;
 }
 
-button {
-  cursor: pointer;
+/* Gallery / Grid styles like Poki tiles */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
 }
 
-/* FOOTER */
+.gallery-item {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gallery-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.gallery-item img,
+.gallery-item video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Cards section (Games etc.) */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.card {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+  font-size: 1.25rem;
+  color: #111;
+  margin-bottom: 0.5rem;
+}
+
+.card .muted {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.card .card-actions {
+  margin-top: auto;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.card-actions .btn.small {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* Forms (Suggestions etc.) */
+.suggestion-form {
+  max-width: 500px;
+  margin: 2rem auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.suggestion-form input,
+.suggestion-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  color: #333;
+}
+
+.suggestion-form button {
+  background: #007aff;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.suggestion-form button:hover {
+  background: #005bb5;
+}
+
+/* Footer */
 .site-footer {
-  background: #141416;
+  background: #fff;
+  color: #555;
+  border-top: 1px solid #e2e2e5;
   padding: 2rem 0;
   text-align: center;
-  border-top: 1px solid #252528;
+}
+
+.site-footer small {
+  color: #888;
 }
 
 .foot-nav a {
   margin: 0 0.8rem;
-  color: #ccc;
-  text-decoration: none;
   font-size: 0.9rem;
+  color: #555;
 }
 
 .foot-nav a:hover {
-  color: #00eaff;
+  color: #007aff;
 }
 
-/* RESPONSIVE */
+/* Responsive */
 @media (max-width: 768px) {
-  .header-inner {
-    flex-direction: column;
+  .hero-content h1 {
+    font-size: 2.2rem;
+  }
+  .hero-content p {
+    font-size: 1rem;
   }
   .nav {
-    margin-top: 0.5rem;
-  }
-  .hero-content h1 {
-    font-size: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 0.75rem;
   }
 }
