@@ -4,9 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>@Auleaux | Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+  <!-- Header -->
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="index.html">
@@ -23,20 +28,58 @@
     </div>
   </header>
 
+  <!-- Hero Section -->
+  <section class="hero small">
+    <div class="hero-content">
+      <h1>Studio Events</h1>
+      <p>Explore the highlights and showcases from our latest creative events.</p>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
   <main class="section container">
-    <h1>Studio Events</h1>
-    <p>See our latest event highlights and video showcases.</p>
-    <div class="gallery-grid large">
-      <div class="gallery-item"><img src="gallery1.jpg" alt="Event"></div>
-      <div class="gallery-item"><video controls><source src="event1.mp4" type="video/mp4"></video></div>
-      <div class="gallery-item"><img src="gallery2.jpg" alt="Event"></div>
+    <h2 class="section-title">Event Highlights</h2>
+    <p class="section-subtitle">Snapshots and video previews from Auleaux Studios’ latest moments.</p>
+
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="gallery1.jpg" alt="Event 1">
+        <div class="overlay">
+          <h3>Art Showcase</h3>
+          <p>Capturing imagination through creativity.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <video autoplay muted loop>
+          <source src="event1.mp4" type="video/mp4">
+        </video>
+        <div class="overlay">
+          <h3>Behind the Scenes</h3>
+          <p>Watch the energy and passion that fuels Auleaux.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <img src="gallery2.jpg" alt="Event 2">
+        <div class="overlay">
+          <h3>Team Gathering</h3>
+          <p>Moments of collaboration and creativity.</p>
+        </div>
+      </div>
     </div>
   </main>
 
+  <!-- Footer -->
   <footer class="site-footer">
     <div class="container footer-inner">
       <small>© 2025 Auleaux Studios</small>
+      <nav class="foot-nav">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms & Conditions</a>
+      </nav>
     </div>
   </footer>
+
 </body>
 </html>
