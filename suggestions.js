@@ -1,5 +1,4 @@
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
-<script>
+// Initialize Supabase
 const SUPABASE_URL = 'https://gsifcmkfoaayngpuipzc.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzaWZjbWtmb2FheW5ncHVpcHpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTk1OTksImV4cCI6MjA3MTg3NTU5OX0.JLj0KAYd4882zaIlOGrzWxLAVwUhY2LGA4ggVLbhbv4';
 const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -49,12 +48,13 @@ suggestionForm.addEventListener('submit', async (e) => {
   const suggestionText = suggestionInput.value.trim();
   if (!suggestionText) return;
 
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return alert("User not found.");
+  const user = supabase.auth.getUser();
+  const { data: sessionData } = await supabase.auth.getSession();
+  const userData = sessionData?.user;
 
   const { error } = await supabase
     .from('suggestions')
-    .insert([{ user_id: user.id, name: user.user_metadata.full_name || user.email, email: user.email, suggestion: suggestionText }]);
+    .insert([{ user_id: userData.id, name: userData.user_metadata.full_name || userData.email, email: userData.email, suggestion: suggestionText }]);
   
   if (error) alert(error.message);
   else {
@@ -70,9 +70,9 @@ async function fetchSuggestions() {
     .select('*')
     .order('likes', { ascending: false })
     .order('created_at', { ascending: false });
-
-  if (error) return console.error(error);
-
+  
+  if (error) console.error(error);
+  
   suggestionsList.innerHTML = '';
   data.forEach(item => {
     const card = document.createElement('div');
@@ -88,7 +88,7 @@ async function fetchSuggestions() {
     suggestionsList.appendChild(card);
   });
 
-  // Attach events
+  // Attach like button events
   document.querySelectorAll('.like-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
       const id = btn.dataset.id;
@@ -97,7 +97,7 @@ async function fetchSuggestions() {
         .select('likes')
         .eq('id', id)
         .single();
-
+      
       await supabase
         .from('suggestions')
         .update({ likes: item.likes + 1 })
@@ -107,6 +107,7 @@ async function fetchSuggestions() {
     });
   });
 
+  // Attach delete button events
   document.querySelectorAll('.delete-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
       const id = btn.dataset.id;
@@ -120,4 +121,3 @@ async function fetchSuggestions() {
 supabase.auth.getSession().then(({ data: { session } }) => {
   if (session?.user) fetchSuggestions();
 });
-</script>
