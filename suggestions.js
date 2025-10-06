@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded', function() {
 // --- CONFIG: replace with your actual project values ---
 var SUPABASE_URL = 'https://gsifcmkfoaayngpuipzc.supabase.co';
 var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzaWZjbWtmb2FheW5ncHVpcHpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTk1OTksImV4cCI6MjA3MTg3NTU5OX0.JLj0KAYd4882zaIlOGrzWxLAVwUhY2LGA4ggVLbhbv4';
@@ -148,3 +149,4 @@ function attachButtonEvents() {
     });
   });
 }
+});
