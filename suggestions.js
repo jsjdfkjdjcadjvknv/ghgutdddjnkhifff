@@ -1,6 +1,6 @@
 <script type="module">
   // Import Supabase client (ESM version)
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
   // --- CONFIG: replace with your actual project values ---
   const SUPABASE_URL = 'https://gsifcmkfoaayngpuipzc.supabase.co';
