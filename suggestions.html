@@ -1,144 +1,59 @@
-document.addEventListener('DOMContentLoaded', async () => {
-  // --- CONFIG: replace with your actual project values ---
-  const SUPABASE_URL = 'https://gsifcmkfoaayngpuipzc.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzaWZjbWtmb2FheW5ncHVpcHpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTk1OTksImV4cCI6MjA3MTg3NTU5OX0.JLj0KAYd4882zaIlOGrzWxLAVwUhY2LGA4ggVLbhbv4';
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>@Auleaux | Suggestions</title>
+<link rel="stylesheet" href="styles.css">
 
-  // Initialize Supabase client (UMD global)
-  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+<!-- Supabase library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
 
-  // DOM references
-  const loginBtn = document.getElementById('login-btn');
-  const logoutBtn = document.getElementById('logout-btn');
-  const userInfo = document.getElementById('user-info');
-  const suggestionFormContainer = document.getElementById('suggestion-form-container');
-  const suggestionForm = document.getElementById('suggestion-form');
-  const suggestionInput = document.getElementById('suggestion-input');
-  const suggestionsList = document.getElementById('suggestions-list');
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html">
+      <img src="avl.svg" alt="logo" class="logo">
+      <span class="brand-text">Auleaux Studios</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="events.html">Events</a>
+      <a href="games.html">Games</a>
+      <a href="updates.html">Updates</a>
+      <a href="suggestions.html" class="active">Suggestions</a>
+    </nav>
+  </div>
+</header>
 
-  // --- AUTH FLOW ---
-  loginBtn.addEventListener('click', async () => {
-    const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
-    if (error) alert(error.message);
-  });
+<main class="section container">
+  <h1>Share Your Suggestions</h1>
 
-  logoutBtn.addEventListener('click', async () => {
-    await supabase.auth.signOut();
-    window.location.reload();
-  });
+  <div id="auth">
+    <button id="login-btn" class="btn primary">Login with Google</button>
+    <p id="user-info"></p>
+    <button id="logout-btn" class="btn secondary" style="display:none;">Logout</button>
+  </div>
 
-  // Listen for auth changes
-  supabase.auth.onAuthStateChange((_event, session) => updateUI(session));
+  <div id="suggestion-form-container" style="display:none;">
+    <form id="suggestion-form" class="suggestion-form">
+      <textarea id="suggestion-input" placeholder="Type your suggestion..."></textarea>
+      <button type="submit" class="btn primary">Submit</button>
+    </form>
+  </div>
 
-  // Initial load
-  const { data: { session } } = await supabase.auth.getSession();
-  updateUI(session);
+  <div id="suggestions-list" class="cards"></div>
+</main>
 
-  // --- UI STATE SYNC ---
-  async function updateUI(session) {
-    if (session?.user) {
-      const user = session.user;
-      userInfo.textContent = `Logged in as ${user.email}`;
-      loginBtn.style.display = 'none';
-      logoutBtn.style.display = 'inline-block';
-      suggestionFormContainer.style.display = 'block';
-      await fetchSuggestions();
-    } else {
-      userInfo.textContent = '';
-      loginBtn.style.display = 'inline-block';
-      logoutBtn.style.display = 'none';
-      suggestionFormContainer.style.display = 'none';
-      suggestionsList.innerHTML = '';
-    }
-  }
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <small>© 2025 Auleaux Studios</small>
+  </div>
+</footer>
 
-  // --- SUBMIT NEW SUGGESTION ---
-  suggestionForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const text = suggestionInput.value.trim();
-    if (!text) return;
+<!-- External JS -->
+<script src="suggestions.js"></script>
 
-    const { data: user } = await supabase.auth.getUser();
-    if (!user) {
-      alert('You must be logged in to submit.');
-      return;
-    }
-
-    const { error } = await supabase.from('suggestions').insert([{
-      user_id: user.id,
-      name: user.user_metadata?.full_name || user.email,
-      email: user.email,
-      suggestion: text,
-      likes: 0
-    }]);
-
-    if (error) {
-      console.error(error);
-      alert(error.message);
-      return;
-    }
-
-    suggestionInput.value = '';
-    await fetchSuggestions();
-  });
-
-  // --- FETCH & RENDER ---
-  async function fetchSuggestions() {
-    const { data: suggestions, error } = await supabase
-      .from('suggestions')
-      .select('*')
-      .order('likes', { ascending: false })
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    const { data: user } = await supabase.auth.getUser();
-
-    suggestionsList.innerHTML = '';
-    suggestions.forEach(item => {
-      const card = document.createElement('div');
-      card.classList.add('card');
-
-      const deleteButton = (user && item.user_id === user.id)
-        ? `<button class="btn small delete-btn" data-id="${item.id}">Delete</button>`
-        : '';
-
-      card.innerHTML = `
-        <h3>${item.name}</h3>
-        <p>${item.suggestion}</p>
-        <div class="card-actions">
-          <button class="btn small like-btn" data-id="${item.id}">👍 ${item.likes}</button>
-          ${deleteButton}
-        </div>
-      `;
-
-      suggestionsList.appendChild(card);
-    });
-
-    attachButtonEvents();
-  }
-
-  // --- BUTTON ACTIONS ---
-  function attachButtonEvents() {
-    document.querySelectorAll('.like-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const id = btn.dataset.id;
-        const { data, error } = await supabase.from('suggestions').select('likes').eq('id', id).single();
-        if (error) return console.error(error);
-        const likes = data?.likes || 0;
-        await supabase.from('suggestions').update({ likes: likes + 1 }).eq('id', id);
-        await fetchSuggestions();
-      });
-    });
-
-    document.querySelectorAll('.delete-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const id = btn.dataset.id;
-        await supabase.from('suggestions').delete().eq('id', id);
-        await fetchSuggestions();
-      });
-    });
-  }
-});
+</body>
+</html>
