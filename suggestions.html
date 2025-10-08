@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>@Auleaux | Suggestions</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@Auleaux | Suggestions</title>
+  <link rel="stylesheet" href="styles.css">
 
-<!-- Supabase UMD library -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.26.0/dist/umd/supabase.min.js"></script>
+  <!-- ✅ Load Supabase UMD library only ONCE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.26.0/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 
@@ -51,13 +51,19 @@
     <small>© 2025 Auleaux Studios</small>
   </div>
 </footer>
-  
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.26.0/dist/umd/supabase.js"></script>
+
+<!-- ✅ JS: only runs after Supabase is guaranteed loaded -->
 <script>
-  document.addEventListener('DOMContentLoaded', async () => {
-    const SUPABASE_URL = 'https://gsifcmkfoaayngpuipzc.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzaWZjbWtmb2FheW5ncHVpcHpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTk1OTksImV4cCI6MjA3MTg3NTU5OX0.JLj0KAYd4882zaIlOGrzWxLAVwUhY2LGA4ggVLbhbv4';
-    const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+document.addEventListener('DOMContentLoaded', async () => {
+  // Wait until Supabase global is ready
+  if (typeof Supabase === 'undefined') {
+    console.error('Supabase script not loaded correctly');
+    return;
+  }
+
+  const SUPABASE_URL = 'https://gsifcmkfoaayngpuipzc.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzaWZjbWtmb2FheW5ncHVpcHpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTk1OTksImV4cCI6MjA3MTg3NTU5OX0.JLj0KAYd4882zaIlOGrzWxLAVwUhY2LGA4ggVLbhbv4';
+  const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const loginBtn = document.getElementById('login-btn');
   const logoutBtn = document.getElementById('logout-btn');
@@ -106,7 +112,8 @@
     const text = suggestionInput.value.trim();
     if (!text) return;
 
-    const { data: user } = await supabase.auth.getUser();
+    const { data: userData } = await supabase.auth.getUser();
+    const user = userData?.user;
     if (!user) {
       alert('You must be logged in to submit.');
       return;
@@ -140,7 +147,9 @@
 
     if (error) return console.error(error);
 
-    const { data: user } = await supabase.auth.getUser();
+    const { data: userData } = await supabase.auth.getUser();
+    const user = userData?.user;
+
     suggestionsList.innerHTML = '';
 
     suggestions.forEach(item => {
