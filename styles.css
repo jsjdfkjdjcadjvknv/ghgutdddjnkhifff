@@ -38,7 +38,6 @@ a:hover {
 .site-header {
   background: #fff;
   border-bottom: 1px solid #e2e2e5;
-  position: sticky;
   top: 0;
   z-index: 100;
 }
@@ -350,4 +349,5 @@ a:hover {
     margin-top: 0.75rem;
   }
 }
+
 
