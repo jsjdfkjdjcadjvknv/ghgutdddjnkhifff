@@ -44,7 +44,7 @@ a:hover {
 
 .header-inner {
   display: flex;
-  align-items: 40px;
+  align-items: 80px;
   overflow: hidden;
 }
 
@@ -55,7 +55,7 @@ a:hover {
 
 .logo {
   height: 100px;
-  max-height: 60px;
+  max-height: 100px;
   width: auto;
 }
 
@@ -349,6 +349,7 @@ a:hover {
     margin-top: 0.75rem;
   }
 }
+
 
 
 
