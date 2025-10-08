@@ -44,8 +44,8 @@ a:hover {
 
 .header-inner {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: 40px;
+  overflow: hidden;
 }
 
 .brand {
@@ -55,8 +55,8 @@ a:hover {
 
 .logo {
   height: 100px;
+  max-height: 60px;
   width: auto;
-  margin-right: 0.75rem;
 }
 
 .brand-text {
@@ -349,5 +349,6 @@ a:hover {
     margin-top: 0.75rem;
   }
 }
+
 
 
