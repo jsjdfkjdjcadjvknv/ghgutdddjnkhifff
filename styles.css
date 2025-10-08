@@ -38,14 +38,15 @@ a:hover {
 .site-header {
   background: #fff;
   border-bottom: 1px solid #e2e2e5;
-  top: 0;
-  z-index: 100;
+  height: 80px;
+  max-height:80px;
+  overflow: hidden;
 }
 
 .header-inner {
   display: flex;
-  align-items: 80px;
-  overflow: hidden;
+  align-items: center;
+  height: 100px;
 }
 
 .brand {
@@ -54,7 +55,7 @@ a:hover {
 }
 
 .logo {
-  height: 100px;
+  height: auto;
   max-height: 100px;
   width: auto;
 }
@@ -349,6 +350,7 @@ a:hover {
     margin-top: 0.75rem;
   }
 }
+
 
 
 
