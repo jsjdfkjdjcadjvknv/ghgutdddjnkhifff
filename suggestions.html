@@ -6,6 +6,7 @@
   <title>@Auleaux | Suggestions</title>
   <link rel="stylesheet" href="styles.css">
 
+  <!-- Supabase UMD -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.26.0/dist/umd/supabase.min.js"></script>
 </head>
 <body>
@@ -60,7 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const SUPABASE_URL = 'https://gsifcmkfoaayngpuipzc.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzaWZjbWtmb2FheW5ncHVpcHpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTk1OTksImV4cCI6MjA3MTg3NTU5OX0.JLj0KAYd4882zaIlOGrzWxLAVwUhY2LGA4ggVLbhbv4';
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const loginBtn = document.getElementById('login-btn');
   const logoutBtn = document.getElementById('logout-btn');
@@ -70,26 +71,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   const suggestionInput = document.getElementById('suggestion-input');
   const suggestionsList = document.getElementById('suggestions-list');
 
-  // LOGIN / LOGOUT
+  // LOGIN
   loginBtn.addEventListener('click', async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-  provider: 'google',
-  options: {
-    redirectTo: window.location.href
-  }
-});
-
+    const { error } = await supabaseClient.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.href }
+    });
     if (error) console.error('Login error:', error.message);
   });
 
+  // LOGOUT
   logoutBtn.addEventListener('click', async () => {
-    await supabase.auth.signOut();
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) console.error('Logout error:', error.message);
     window.location.reload();
   });
 
-  supabase.auth.onAuthStateChange((_event, session) => updateUI(session));
+  // AUTH STATE CHANGE
+  supabaseClient.auth.onAuthStateChange((_event, session) => updateUI(session));
 
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await supabaseClient.auth.getSession();
   updateUI(session);
 
   async function updateUI(session) {
@@ -115,15 +116,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const text = suggestionInput.value.trim();
     if (!text) return;
 
-    const { data: userData } = await supabase.auth.getUser();
-    const user = userData?.user;
+    const { data: { user } } = await supabaseClient.auth.getUser();
     if (!user) {
       alert('You must be logged in to submit.');
       return;
     }
 
-    const { error } = await supabase.from('suggestions').insert([{
-      user_id: user.id.toString(),
+    const { error } = await supabaseClient.from('suggestions').insert([{
+      user_id: user.id.toString(),   // ✅ text column matches string
       name: user.user_metadata?.full_name || user.email,
       email: user.email,
       suggestion: text,
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }]);
 
     if (error) {
-      console.error(error);
+      console.error('Insert error:', error.message);
       alert(error.message);
       return;
     }
@@ -140,29 +140,29 @@ document.addEventListener('DOMContentLoaded', async () => {
     await fetchSuggestions();
   });
 
-  // FETCH & RENDER SUGGESTIONS
+  // FETCH & RENDER
   async function fetchSuggestions() {
-    const { data: suggestions, error } = await supabase
+    const { data: suggestions, error } = await supabaseClient
       .from('suggestions')
       .select('*')
       .order('likes', { ascending: false })
       .order('created_at', { ascending: false });
 
-    if (error) return console.error(error);
+    if (error) {
+      console.error('Fetch error:', error.message);
+      return;
+    }
 
-    const { data: userData } = await supabase.auth.getUser();
-    const user = userData?.user;
-
+    const { data: { user } } = await supabaseClient.auth.getUser();
     suggestionsList.innerHTML = '';
 
     suggestions.forEach(item => {
-      const card = document.createElement('div');
-      card.classList.add('card');
-
-      const deleteButton = (user && item.user_id === user.id)
+      const deleteButton = (user && item.user_id === user.id.toString())
         ? `<button class="btn small delete-btn" data-id="${item.id}">Delete</button>`
         : '';
 
+      const card = document.createElement('div');
+      card.classList.add('card');
       card.innerHTML = `
         <h3>${item.name}</h3>
         <p>${item.suggestion}</p>
@@ -179,21 +179,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function attachButtonEvents() {
+    // LIKE
     document.querySelectorAll('.like-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         const id = btn.dataset.id;
-        const { data, error } = await supabase.from('suggestions').select('likes').eq('id', id).single();
-        if (error) return console.error(error);
+        const { data, error } = await supabaseClient.from('suggestions').select('likes').eq('id', id).single();
+        if (error) return console.error('Like fetch error:', error.message);
+
         const likes = data?.likes || 0;
-        await supabase.from('suggestions').update({ likes: likes + 1 }).eq('id', id);
+        await supabaseClient.from('suggestions').update({ likes: likes + 1 }).eq('id', id);
         await fetchSuggestions();
       });
     });
 
+    // DELETE
     document.querySelectorAll('.delete-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         const id = btn.dataset.id;
-        await supabase.from('suggestions').delete().eq('id', id);
+        const { error } = await supabaseClient.from('suggestions').delete().eq('id', id);
+        if (error) console.error('Delete error:', error.message);
         await fetchSuggestions();
       });
     });
