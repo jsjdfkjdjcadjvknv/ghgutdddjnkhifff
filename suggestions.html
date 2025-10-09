@@ -51,10 +51,8 @@
   </div>
 </footer>
 
-<!-- ✅ JS: only runs after Supabase is guaranteed loaded -->
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
-  // Wait until Supabase global is ready
   if (typeof window.supabase === 'undefined') {
     console.error('Supabase script not loaded correctly');
     return;
@@ -74,7 +72,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // LOGIN / LOGOUT
   loginBtn.addEventListener('click', async () => {
-    const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
+    const { error } = await supabase.auth.signInWithOAuth({
+  provider: 'google',
+  options: {
+    redirectTo: window.location.origin 
+  }
+});
+
     if (error) alert(error.message);
   });
 
