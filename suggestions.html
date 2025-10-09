@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-    if (error) alert(error.message);
+    if (error) console.error('Login error:', error.message);
   });
 
   logoutBtn.addEventListener('click', async () => {
