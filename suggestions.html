@@ -1,68 +1,17 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>@Auleaux | Suggestions</title>
-  <link rel="stylesheet" href="styles.css">
-
-  <!-- Supabase UMD -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.26.0/dist/umd/supabase.min.js"></script>
-</head>
-<body>
-
-<header class="site-header">
-  <div class="container header-inner">
-    <a class="brand" href="index.html">
-      <img src="avl.svg" alt="logo" class="logo">
-      <span class="brand-text">Auleaux Studios</span>
-    </a>
-    <nav class="nav">
-      <a href="index.html">Home</a>
-      <a href="events.html">Events</a>
-      <a href="games.html">Games</a>
-      <a href="updates.html">Updates</a>
-      <a href="suggestions.html" class="active">Suggestions</a>
-    </nav>
-  </div>
-</header>
-
-<main class="section container">
-  <h1>Share Your Suggestions</h1>
-
-  <div id="auth">
-    <button id="login-btn" class="btn primary">Login with Google</button>
-    <p id="user-info"></p>
-    <button id="logout-btn" class="btn secondary" style="display:none;">Logout</button>
-  </div>
-
-  <div id="suggestion-form-container" style="display:none;">
-    <form id="suggestion-form" class="suggestion-form">
-      <textarea id="suggestion-input" placeholder="Type your suggestion..."></textarea>
-      <button type="submit" class="btn primary">Submit</button>
-    </form>
-  </div>
-
-  <div id="suggestions-list" class="cards"></div>
-</main>
-
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <small>© 2025 Auleaux Studios</small>
-  </div>
-</footer>
-
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
+  // Check if Supabase loaded
   if (typeof window.supabase === 'undefined') {
-    console.error('Supabase script not loaded');
+    console.error('Supabase script not loaded correctly');
     return;
   }
 
+  // Supabase client
   const SUPABASE_URL = 'https://gsifcmkfoaayngpuipzc.supabase.co';
-  const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY_HERE'; // replace
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzaWZjbWtmb2FheW5ncHVpcHpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTk1OTksImV4cCI6MjA3MTg3NTU5OX0.JLj0KAYd4882zaIlOGrzWxLAVwUhY2LGA4ggVLbhbv4';
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+  // Elements
   const loginBtn = document.getElementById('login-btn');
   const logoutBtn = document.getElementById('logout-btn');
   const userInfo = document.getElementById('user-info');
@@ -71,37 +20,60 @@ document.addEventListener('DOMContentLoaded', async () => {
   const suggestionInput = document.getElementById('suggestion-input');
   const suggestionsList = document.getElementById('suggestions-list');
 
-  // LOGIN
+  console.log('[DEBUG] DOM loaded, Supabase client initialized');
+
+  // -----------------------------
+  // Login
+  // -----------------------------
   loginBtn.addEventListener('click', async () => {
+    console.log('[DEBUG] Login button clicked');
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo:'https://auleauxstudios.netlify.app/suggestions.html' }
+      options: {
+        redirectTo: 'https://auleauxstudios.netlify.app/suggestions.html' // exact Netlify URL
+      }
     });
-    if (error) console.error('Login error:', error.message);
+    if (error) console.error('[ERROR] Login failed:', error);
   });
 
-  // LOGOUT
+  // -----------------------------
+  // Logout
+  // -----------------------------
   logoutBtn.addEventListener('click', async () => {
+    console.log('[DEBUG] Logout button clicked');
     const { error } = await supabase.auth.signOut();
-    if (error) console.error('Logout error:', error.message);
+    if (error) console.error('[ERROR] Logout failed:', error);
     window.location.reload();
   });
 
-  // Listen for auth changes
-  supabase.auth.onAuthStateChange((_event, session) => updateUI(session));
+  // -----------------------------
+  // Auth state change
+  // -----------------------------
+  supabase.auth.onAuthStateChange((_event, session) => {
+    console.log('[DEBUG] Auth state changed', _event, session);
+    updateUI(session);
+  });
 
-  const { data: { session } } = await supabase.auth.getSession();
+  // Check current session
+  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+  if (sessionError) console.error('[ERROR] getSession failed:', sessionError);
+  console.log('[DEBUG] Initial session:', session);
   updateUI(session);
 
+  // -----------------------------
+  // Update UI based on session
+  // -----------------------------
   async function updateUI(session) {
     if (session?.user) {
       const user = session.user;
+      console.log('[DEBUG] User logged in:', user.id, user.email);
       userInfo.textContent = `Logged in as ${user.email}`;
       loginBtn.style.display = 'none';
       logoutBtn.style.display = 'inline-block';
       suggestionFormContainer.style.display = 'block';
       await fetchSuggestions();
     } else {
+      console.log('[DEBUG] No user session');
       userInfo.textContent = '';
       loginBtn.style.display = 'inline-block';
       logoutBtn.style.display = 'none';
@@ -110,17 +82,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // SUBMIT
-  suggestionForm.addEventListener('submit', async e => {
+  // -----------------------------
+  // Submit suggestion
+  // -----------------------------
+  suggestionForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const text = suggestionInput.value.trim();
     if (!text) return;
 
-    const { data: userData } = await supabase.auth.getUser();
-    const user = userData?.user;
-    if (!user) { alert('You must be logged in'); return; }
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError) console.error('[ERROR] getUser failed:', userError);
 
-    const { error } = await supabase.from('suggestions').insert([{
+    const user = userData?.user;
+    if (!user) {
+      alert('You must be logged in to submit.');
+      console.warn('[WARN] User not logged in');
+      return;
+    }
+
+    console.log('[DEBUG] Inserting suggestion for user:', user.id);
+
+    const { error: insertError } = await supabase.from('suggestions').insert([{
       user_id: user.id.toString(),
       name: user.user_metadata?.full_name || user.email,
       email: user.email,
@@ -128,13 +110,19 @@ document.addEventListener('DOMContentLoaded', async () => {
       likes: 0
     }]);
 
-    if (error) { console.error(error); alert(error.message); return; }
+    if (insertError) {
+      console.error('[ERROR] Insert failed:', insertError);
+      alert(insertError.message);
+      return;
+    }
 
     suggestionInput.value = '';
     await fetchSuggestions();
   });
 
-  // FETCH & RENDER
+  // -----------------------------
+  // Fetch suggestions
+  // -----------------------------
   async function fetchSuggestions() {
     const { data: suggestions, error } = await supabase
       .from('suggestions')
@@ -142,7 +130,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       .order('likes', { ascending: false })
       .order('created_at', { ascending: false });
 
-    if (error) return console.error(error);
+    if (error) {
+      console.error('[ERROR] Fetch suggestions failed:', error);
+      return;
+    }
+
+    console.log('[DEBUG] Fetched suggestions:', suggestions);
 
     const { data: userData } = await supabase.auth.getUser();
     const user = userData?.user;
@@ -151,7 +144,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     suggestions.forEach(item => {
       const deleteButton = (user && item.user_id === user.id.toString())
-        ? `<button class="btn small delete-btn" data-id="${item.id}">Delete</button>` : '';
+        ? `<button class="btn small delete-btn" data-id="${item.id}">Delete</button>`
+        : '';
 
       const card = document.createElement('div');
       card.classList.add('card');
@@ -169,13 +163,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     attachButtonEvents();
   }
 
-  // Attach like & delete events
+  // -----------------------------
+  // Attach button events
+  // -----------------------------
   function attachButtonEvents() {
     document.querySelectorAll('.like-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         const id = btn.dataset.id;
+        console.log('[DEBUG] Like button clicked for:', id);
         const { data, error } = await supabase.from('suggestions').select('likes').eq('id', id).single();
-        if (error) return console.error(error);
+        if (error) return console.error('[ERROR] Fetch likes failed:', error);
         const likes = data?.likes || 0;
         await supabase.from('suggestions').update({ likes: likes + 1 }).eq('id', id);
         await fetchSuggestions();
@@ -185,14 +182,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('.delete-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         const id = btn.dataset.id;
-        await supabase.from('suggestions').delete().eq('id', id);
+        console.log('[DEBUG] Delete button clicked for:', id);
+        const { error } = await supabase.from('suggestions').delete().eq('id', id);
+        if (error) console.error('[ERROR] Delete failed:', error);
         await fetchSuggestions();
       });
     });
   }
-
 });
 </script>
-
-</body>
-</html>
