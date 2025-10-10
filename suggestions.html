@@ -1,3 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@Auleaux | Suggestions</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Supabase UMD -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.26.0/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html">
+      <img src="avl.svg" alt="logo" class="logo">
+      <span class="brand-text">Auleaux Studios</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="events.html">Events</a>
+      <a href="games.html">Games</a>
+      <a href="updates.html">Updates</a>
+      <a href="suggestions.html" class="active">Suggestions</a>
+    </nav>
+  </div>
+</header>
+
+<main class="section container">
+  <h1>Share Your Suggestions</h1>
+
+  <div id="auth">
+    <button id="login-btn" class="btn primary">Login with Google</button>
+    <p id="user-info"></p>
+    <button id="logout-btn" class="btn secondary" style="display:none;">Logout</button>
+  </div>
+
+  <div id="suggestion-form-container" style="display:none;">
+    <form id="suggestion-form" class="suggestion-form">
+      <textarea id="suggestion-input" placeholder="Type your suggestion..."></textarea>
+      <button type="submit" class="btn primary">Submit</button>
+    </form>
+  </div>
+
+  <div id="suggestions-list" class="cards"></div>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <small>© 2025 Auleaux Studios</small>
+  </div>
+</footer>
+
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
   // Check if Supabase loaded
