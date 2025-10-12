@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="styles.css">
 
   <!-- Supabase UMD -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.26.0/dist/umd/supabase.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.1/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 
@@ -15,7 +15,6 @@
   <div class="container header-inner">
     <a class="brand" href="index.html">
       <img src="avl.svg" alt="logo" class="logo">
-      <span class="brand-text">Auleaux Studios</span>
     </a>
     <nav class="nav">
       <a href="index.html">Home</a>
@@ -28,13 +27,20 @@
 </header>
 
 <main class="section container">
-  <h1>Share Your Suggestions</h1>
+  <h3>Suggestions let users connect directly to our team to improve product quality.</h3>
+
+  <h3>⚠ Important ⚠</h3>
+  <h3>• Comments/feedback here are PUBLICLY VISIBLE.</h3>
+  <h3>• Don’t share personal info.</h3>
+  <h3>• Spam/abuse = block + delete.</h3>
 
   <div id="auth">
     <button id="login-btn" class="btn primary">Login with Google</button>
     <p id="user-info"></p>
     <button id="logout-btn" class="btn secondary" style="display:none;">Logout</button>
   </div>
+
+  <div id="loader" style="display:none; text-align:center; margin:1em;">Loading...</div>
 
   <div id="suggestion-form-container" style="display:none;">
     <form id="suggestion-form" class="suggestion-form">
@@ -48,16 +54,22 @@
 
 <footer class="site-footer">
   <div class="container footer-inner">
-    <small>© 2025 Auleaux Studios</small>
+    <small>© 2025 Auleaux Studios. All Rights Reserved.</small>
+    <nav class="foot-nav">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms & Conditions</a>
+    </nav>
   </div>
 </footer>
 
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
-  const SUPABASE_URL = 'https://gsifcmkfoaayngpuipzc.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzaWZjbWtmb2FheW5ncHVpcHpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTk1OTksImV4cCI6MjA3MTg3NTU5OX0.JLj0KAYd4882zaIlOGrzWxLAVwUhY2LGA4ggVLbhbv4';
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  // --- Supabase client ---
+  const supabaseUrl = 'https://gsifcmkfoaayngpuipzc.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzaWZjbWtmb2FheW5ncHVpcHpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTk1OTksImV4cCI6MjA3MTg3NTU5OX0.JLj0KAYd4882zaIlOGrzWxLAVwUhY2LGA4ggVLbhbv4';
+  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+  // --- Elements ---
   const loginBtn = document.getElementById('login-btn');
   const logoutBtn = document.getElementById('logout-btn');
   const userInfo = document.getElementById('user-info');
@@ -65,33 +77,42 @@ document.addEventListener('DOMContentLoaded', async () => {
   const suggestionForm = document.getElementById('suggestion-form');
   const suggestionInput = document.getElementById('suggestion-input');
   const suggestionsList = document.getElementById('suggestions-list');
+  const loader = document.getElementById('loader');
 
-  // -------- LOGIN --------
+  // --- Utility ---
+  const showLoader = (state) => loader.style.display = state ? 'block' : 'none';
+
+  // --- Auth flow ---
   loginBtn.addEventListener('click', async () => {
+    console.log('[DEBUG] Login clicked');
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: {
-        redirectTo: window.location.origin + '/suggestions.html'
-      }
+      options: { redirectTo: 'https://auleauxstudios.netlify.app/suggestions.html' }
     });
-    if (error) console.error('Login failed:', error);
+    if (error) console.error('[ERROR] Login failed:', error);
   });
 
-  // -------- LOGOUT --------
   logoutBtn.addEventListener('click', async () => {
+    console.log('[DEBUG] Logout clicked');
     await supabase.auth.signOut();
-    location.reload();
+    sessionStorage.clear();
+    localStorage.clear();
+    window.location.href = 'https://auleauxstudios.netlify.app/suggestions.html';
   });
 
-  // -------- AUTH STATE --------
-  supabase.auth.onAuthStateChange((_event, session) => updateUI(session));
-
+  // --- Session restore ---
   const { data: { session } } = await supabase.auth.getSession();
   updateUI(session);
 
+  supabase.auth.onAuthStateChange((_event, session) => {
+    console.log('[DEBUG] Auth changed', _event);
+    updateUI(session);
+  });
+
   async function updateUI(session) {
     if (session?.user) {
-      userInfo.textContent = `Logged in as ${session.user.email}`;
+      const user = session.user;
+      userInfo.textContent = `Logged in as ${user.email}`;
       loginBtn.style.display = 'none';
       logoutBtn.style.display = 'inline-block';
       suggestionFormContainer.style.display = 'block';
@@ -105,119 +126,91 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // -------- SUBMIT SUGGESTION --------
+  // --- Submit suggestion ---
   suggestionForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const text = suggestionInput.value.trim();
-    if (!text) return;
+    if (!text) return alert('Please enter a suggestion');
 
-    suggestionInput.disabled = true;
+    const { data: { user }, error: userErr } = await supabase.auth.getUser();
+    if (userErr || !user) return alert('Please login first');
 
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      alert('Login required.');
-      suggestionInput.disabled = false;
-      return;
-    }
-
-    const { error } = await supabase.from('suggestions').insert([{
+    showLoader(true);
+    const { error } = await supabase.from('suggestions').insert({
       user_id: user.id,
       name: user.user_metadata.full_name || user.email,
       email: user.email,
       suggestion: text,
       likes: 0
-    }]);
+    });
+    showLoader(false);
+
+    if (error) return alert('Failed to submit: ' + error.message);
 
     suggestionInput.value = '';
-    suggestionInput.disabled = false;
-
-    if (error) {
-      console.error('Insert failed:', error);
-      alert('Failed to post. Try again.');
-    } else {
-      await fetchSuggestions();
-    }
+    await fetchSuggestions();
   });
 
-  // -------- FETCH SUGGESTIONS --------
+  // --- Fetch suggestions ---
   async function fetchSuggestions() {
-    const { data: { user } } = await supabase.auth.getUser();
-    const { data: blockedData } = await supabase.from('blocked_users')
-      .select('blocked_user_id')
-      .eq('user_id', user?.id || '');
-
-    const blockedIds = (blockedData || []).map(b => b.blocked_user_id);
-
+    showLoader(true);
     const { data: suggestions, error } = await supabase
       .from('suggestions')
       .select('*')
-      .order('likes', { ascending: false });
+      .order('likes', { ascending: false })
+      .order('created_at', { ascending: false });
+    showLoader(false);
 
-    if (error) return console.error('Fetch suggestions failed:', error);
+    if (error) {
+      console.error('[ERROR] Fetch failed:', error);
+      suggestionsList.innerHTML = `<p style="color:red;">Failed to load suggestions.</p>`;
+      return;
+    }
+
+    const { data: { user } } = await supabase.auth.getUser();
 
     suggestionsList.innerHTML = '';
-
     for (const item of suggestions) {
-      // Skip blocked users’ content
-      if (blockedIds.includes(item.user_id)) continue;
-
-      const { data: liked } = await supabase
-        .from('suggestion_likes')
-        .select('id')
-        .eq('suggestion_id', item.id)
-        .eq('user_id', user?.id || '')
-        .maybeSingle();
-
-      const hasLiked = !!liked;
-
+      const deleteBtn = user && item.user_id === user.id ? 
+        `<button class="btn small delete-btn" data-id="${item.id}">🗑</button>` : '';
       const card = document.createElement('div');
       card.classList.add('card');
       card.innerHTML = `
         <h3>${item.name}</h3>
         <p>${item.suggestion}</p>
         <div class="card-actions">
-          <button class="btn small like-btn" data-id="${item.id}" ${hasLiked ? 'disabled' : ''}>
-            ${hasLiked ? '❤️' : '👍'} ${item.likes}
-          </button>
-          ${user?.id === item.user_id ? `<button class="btn small delete-btn" data-id="${item.id}">🗑️</button>` : ''}
+          <button class="btn small like-btn" data-id="${item.id}">❤️ ${item.likes}</button>
+          ${deleteBtn}
         </div>
       `;
       suggestionsList.appendChild(card);
     }
-
-    attachButtonEvents();
+    attachEvents();
   }
 
-  // -------- BUTTON EVENTS --------
-  function attachButtonEvents() {
-    // Like button
+  // --- Attach events ---
+  function attachEvents() {
     document.querySelectorAll('.like-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        btn.disabled = true;
-        btn.textContent = '⏳';
-
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return alert('Login first.');
-
+      btn.onclick = async () => {
         const id = btn.dataset.id;
-        const { error } = await supabase.rpc('increment_likes', {
-          suggestion_uuid: id,
-          liker_uuid: user.id
-        });
-
-        if (error) console.error('Like failed:', error);
+        const { data, error } = await supabase.from('suggestions').select('likes').eq('id', id).single();
+        if (error) return alert('Failed to fetch like count');
+        await supabase.from('suggestions').update({ likes: data.likes + 1 }).eq('id', id);
         await fetchSuggestions();
-      });
+      };
     });
 
-    // Delete button
     document.querySelectorAll('.delete-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
+      btn.onclick = async () => {
         const id = btn.dataset.id;
+        if (!confirm('Delete this suggestion?')) return;
         await supabase.from('suggestions').delete().eq('id', id);
         await fetchSuggestions();
-      });
+      };
     });
   }
 });
 </script>
+
+</body>
+</html>
