@@ -64,12 +64,10 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
-  // --- Supabase client ---
   const supabaseUrl = 'https://gsifcmkfoaayngpuipzc.supabase.co';
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzaWZjbWtmb2FheW5ncHVpcHpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTk1OTksImV4cCI6MjA3MTg3NTU5OX0.JLj0KAYd4882zaIlOGrzWxLAVwUhY2LGA4ggVLbhbv4';
   const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-  // --- Elements ---
   const loginBtn = document.getElementById('login-btn');
   const logoutBtn = document.getElementById('logout-btn');
   const userInfo = document.getElementById('user-info');
@@ -79,21 +77,39 @@ document.addEventListener('DOMContentLoaded', async () => {
   const suggestionsList = document.getElementById('suggestions-list');
   const loader = document.getElementById('loader');
 
-  // --- Utility ---
-  const showLoader = (state) => loader.style.display = state ? 'block' : 'none';
+  // --- Add counter ---
+  const counter = document.createElement('span');
+  counter.id = 'word-counter';
+  counter.style.marginLeft = '10px';
+  counter.style.fontSize = '0.9em';
+  counter.style.color = '#555';
+  const submitBtn = suggestionForm.querySelector('button[type="submit"]');
+  submitBtn.insertAdjacentElement('afterend', counter);
 
-  // --- Auth flow ---
-  loginBtn.addEventListener('click', async () => {
-    console.log('[DEBUG] Login clicked');
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: 'https://auleauxstudios.netlify.app/suggestions.html' }
-    });
-    if (error) console.error('[ERROR] Login failed:', error);
+  // --- Word counter logic ---
+  suggestionInput.addEventListener('input', () => {
+    const words = suggestionInput.value.trim().split(/\s+/).filter(Boolean);
+    const count = words.length;
+    counter.textContent = `${count}/200 words`;
+    if (count > 200) {
+      counter.style.color = 'red';
+      submitBtn.disabled = true;
+    } else {
+      counter.style.color = '#555';
+      submitBtn.disabled = false;
+    }
   });
 
+  const showLoader = (state) => loader.style.display = state ? 'block' : 'none';
+
+  // --- Custom redirect (to hide supabase.com) ---
+  loginBtn.addEventListener('click', async () => {
+    console.log('[DEBUG] Login clicked');
+    window.location.href = '/login.html'; // optional custom branding page
+  });
+
+  // --- Logout ---
   logoutBtn.addEventListener('click', async () => {
-    console.log('[DEBUG] Logout clicked');
     await supabase.auth.signOut();
     sessionStorage.clear();
     localStorage.clear();
@@ -103,11 +119,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // --- Session restore ---
   const { data: { session } } = await supabase.auth.getSession();
   updateUI(session);
-
-  supabase.auth.onAuthStateChange((_event, session) => {
-    console.log('[DEBUG] Auth changed', _event);
-    updateUI(session);
-  });
+  supabase.auth.onAuthStateChange((_event, session) => updateUI(session));
 
   async function updateUI(session) {
     if (session?.user) {
@@ -130,10 +142,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   suggestionForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const text = suggestionInput.value.trim();
-    if (!text) return alert('Please enter a suggestion');
+    const words = text.split(/\s+/).filter(Boolean);
+    if (words.length > 150) return alert('chat limited to 150 words.');
+    if (!text) return alert('Enter a suggestion first.');
 
-    const { data: { user }, error: userErr } = await supabase.auth.getUser();
-    if (userErr || !user) return alert('Please login first');
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return alert('Please log in first.');
 
     showLoader(true);
     const { error } = await supabase.from('suggestions').insert({
@@ -146,8 +160,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     showLoader(false);
 
     if (error) return alert('Failed to submit: ' + error.message);
-
     suggestionInput.value = '';
+    counter.textContent = '0/150 words';
     await fetchSuggestions();
   });
 
@@ -162,7 +176,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     showLoader(false);
 
     if (error) {
-      console.error('[ERROR] Fetch failed:', error);
       suggestionsList.innerHTML = `<p style="color:red;">Failed to load suggestions.</p>`;
       return;
     }
@@ -171,7 +184,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     suggestionsList.innerHTML = '';
     for (const item of suggestions) {
-      const deleteBtn = user && item.user_id === user.id ? 
+      const deleteBtn = user && item.user_id === user.id ?
         `<button class="btn small delete-btn" data-id="${item.id}">🗑</button>` : '';
       const card = document.createElement('div');
       card.classList.add('card');
@@ -188,7 +201,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     attachEvents();
   }
 
-  // --- Attach events ---
   function attachEvents() {
     document.querySelectorAll('.like-btn').forEach(btn => {
       btn.onclick = async () => {
@@ -211,6 +223,3 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 </script>
-
-</body>
-</html>
