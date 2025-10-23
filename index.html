@@ -45,12 +45,9 @@
     </div>
   </section>
 
-  <!-- Highlights Section -->
-  <section class="section gallery-preview container">
-    <h2 class="section-title">Recent Highlights</h2>
-    <p class="section-subtitle">Sneak peek from our latest studio events and showcases.</p>
-
-    <div class="cards">
+  <!-- Full-width Events Carousel -->
+  <section class="events-carousel">
+    <div class="events-wrapper">
       <div class="card" data-link="event1.html">
         <h3>Game Jam 2025</h3>
         <p class="muted">Our latest rapid development showcase.</p>
@@ -63,10 +60,19 @@
         <h3>Beta Release</h3>
         <p class="muted">Testing new multiplayer mechanics.</p>
       </div>
-    </div>
-
-    <div class="center">
-      <a href="events.html" class="btn secondary">View All Events</a>
+      <div class="card" data-link="event4.html">
+        <h3>Art Showcase</h3>
+        <p class="muted">Capturing imagination through creativity.</p>
+      </div>
+      <!-- Duplicate cards for seamless scrolling -->
+      <div class="card" data-link="event1.html">
+        <h3>Game Jam 2025</h3>
+        <p class="muted">Our latest rapid development showcase.</p>
+      </div>
+      <div class="card" data-link="event2.html">
+        <h3>Dev Meetup</h3>
+        <p class="muted">Community and collaboration event.</p>
+      </div>
     </div>
   </section>
 
@@ -91,8 +97,8 @@
   </footer>
 
   <script>
-    // Event card click redirect
-    document.querySelectorAll('.card').forEach(card => {
+    // Make event cards clickable
+    document.querySelectorAll('.events-wrapper .card').forEach(card => {
       card.addEventListener('click', () => {
         const target = card.getAttribute('data-link');
         if (target) window.location.href = target;
