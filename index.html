@@ -5,26 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>@Auleaux | Home</title>
   <link rel="stylesheet" href="styles.css">
-  <style>
-    /* ===== Dropdown Styling ===== */
-    .dropdown { position: relative; display: inline-block; }
-    .dropdown-content { display: none; position: absolute; background: #222; color: #fff; min-width: 160px; z-index: 10; }
-    .dropdown-content a { display: block; padding: 10px; color: #fff; text-decoration: none; }
-    .dropdown-content a:hover { background: #444; }
-    .dropdown-content.show { display: block; }
-
-    /* ===== Events Carousel Styling ===== */
-    .events-carousel { position: relative; width: 100%; max-width: 400px; margin: 50px auto; overflow: hidden; }
-    .events-wrapper { display: flex; transition: transform 0.5s ease; }
-    .events-wrapper .card { min-width: 100%; margin: 0; cursor: pointer; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-    .events-wrapper .card img { width: 100%; display: block; }
-    .events-wrapper .card-info { padding: 15px; background: #fff; }
-    
-    /* Carousel Buttons */
-    .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.4); color: #fff; border: none; font-size: 24px; cursor: pointer; padding: 10px; border-radius: 50%; z-index: 5; }
-    .carousel-btn.prev { left: 10px; }
-    .carousel-btn.next { right: 10px; }
-  </style>
 </head>
 <body>
 
@@ -35,7 +15,6 @@
         <img src="avl.svg" alt="logo" class="logo">
         <span class="brand-text">Auleaux Studios</span>
       </a>
-
       <nav class="nav">
         <div class="dropdown">
           <button class="menu-btn">Menu ▾</button>
@@ -53,7 +32,7 @@
     </div>
   </header>
 
-  <!-- Events Slider -->
+  <!-- Events Carousel -->
   <section class="events-carousel">
     <button class="carousel-btn prev">&#10094;</button>
     <div class="events-wrapper">
@@ -119,10 +98,10 @@
   </footer>
 
   <script>
-    // ===== Dropdown Toggle =====
-    document.querySelector('.menu-btn').addEventListener('click', () => {
-      document.querySelector('.dropdown-content').classList.toggle('show');
-    });
+    // ===== Dropdown =====
+    const menuBtn = document.querySelector('.menu-btn');
+    const dropdownContent = document.querySelector('.dropdown-content');
+    menuBtn.addEventListener('click', () => dropdownContent.classList.toggle('show'));
 
     // ===== Carousel =====
     const wrapper = document.querySelector('.events-wrapper');
@@ -142,10 +121,8 @@
     prevBtn.addEventListener('click', () => showCard(currentIndex - 1));
     nextBtn.addEventListener('click', () => showCard(currentIndex + 1));
 
-    // Auto-slide every 5 seconds
     setInterval(() => showCard(currentIndex + 1), 5000);
 
-    // Make cards clickable
     cards.forEach(card => {
       card.addEventListener('click', () => {
         const target = card.getAttribute('data-link');
@@ -153,7 +130,6 @@
       });
     });
 
-    // Initialize
     showCard(0);
   </script>
 
