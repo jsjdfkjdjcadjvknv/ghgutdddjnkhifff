@@ -31,53 +31,35 @@
             <a href="contact.html">Contact</a>
           </div>
         </div>
-        <div class="nav-links">
-          <a href="index.html" class="active">Home</a>
-          <a href="events.html">Events</a>
-          <a href="games.html">Games</a>
-          <a href="updates.html">Updates</a>
-          <a href="suggestions.html">Suggestions</a>
-        </div>
       </nav>
     </div>
   </header>
 
-  <!-- Events Carousel -->
+  <!-- Full-width Events Carousel -->
   <section class="events-carousel">
-    <div class="carousel-wrapper">
-      <div class="carousel-card active" data-link="event1.html">
+    <div class="events-wrapper">
+      <div class="card" data-link="event1.html">
         <h3>Game Jam 2025</h3>
         <p class="muted">Our latest rapid development showcase.</p>
       </div>
-      <div class="carousel-card" data-link="event2.html">
+      <div class="card" data-link="event2.html">
         <h3>Dev Meetup</h3>
         <p class="muted">Community and collaboration event.</p>
       </div>
-      <div class="carousel-card" data-link="event3.html">
+      <div class="card" data-link="event3.html">
         <h3>Beta Release</h3>
         <p class="muted">Testing new multiplayer mechanics.</p>
       </div>
-      <div class="carousel-card" data-link="event4.html">
+      <div class="card" data-link="event4.html">
         <h3>Art Showcase</h3>
         <p class="muted">Capturing imagination through creativity.</p>
-      </div>
-
-      <!-- Arrows -->
-      <span class="arrow left">&#10094;</span>
-      <span class="arrow right">&#10095;</span>
-
-      <!-- Dots -->
-      <div class="dots">
-        <span class="dot active"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
       </div>
     </div>
   </section>
 
   <!-- Hero Section -->
-  <section class="hero">
+  <section class="hero large" style="background-image: url('hero-bg.jpg'); background-size: cover; background-position: center; position: relative;">
+    <div class="hero-overlay"></div>
     <div class="hero-content">
       <h1>Welcome to <span class="highlight">Auleaux Studios</span></h1>
       <p>Crafting immersive multiplayer experiences that connect and inspire players worldwide.</p>
@@ -85,13 +67,36 @@
     </div>
   </section>
 
-  <!-- Contact Section -->
-  <section class="section contact container">
-    <h2 class="section-title">Get in Touch</h2>
-    <p>Want to collaborate or give feedback? Reach out to us anytime.</p>
-    <p class="contact-info">
-      <strong>Email:</strong> <a href="mailto:auleauxstudios@gmail.com">auleauxstudios@gmail.com</a>
-    </p>
+  <!-- Recent Highlights Gallery -->
+  <section class="section gallery-preview container">
+    <h2 class="section-title">Recent Highlights</h2>
+    <p class="section-subtitle">Sneak peek from our latest studio events and showcases.</p>
+
+    <div class="gallery-grid">
+      <div class="gallery-item" title="Game Jam 2025 - Our latest rapid development showcase">
+        <img src="event1.jpg" alt="Game Jam 2025">
+        <div class="overlay">
+          <h3>Game Jam 2025</h3>
+          <p>Our latest rapid development showcase.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item" title="Dev Meetup - Community and collaboration event">
+        <img src="event2.jpg" alt="Dev Meetup">
+        <div class="overlay">
+          <h3>Dev Meetup</h3>
+          <p>Community and collaboration event.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item" title="Beta Release - Testing new multiplayer mechanics">
+        <img src="event3.jpg" alt="Beta Release">
+        <div class="overlay">
+          <h3>Beta Release</h3>
+          <p>Testing new multiplayer mechanics.</p>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- Footer -->
@@ -105,53 +110,31 @@
     </div>
   </footer>
 
-  <!-- JS Carousel + Dropdown -->
+  <!-- Scripts -->
   <script>
-    // Dropdown toggle
+    // Make event cards clickable
+    document.querySelectorAll('.events-wrapper .card').forEach(card => {
+      card.addEventListener('click', () => {
+        const target = card.getAttribute('data-link');
+        if (target) window.location.href = target;
+      });
+    });
+
+    // Dropdown toggle for mobile
     const menuBtn = document.querySelector('.menu-btn');
     const dropdownContent = document.querySelector('.dropdown-content');
-    menuBtn.addEventListener('click', () => {
-      dropdownContent.classList.toggle('show');
-    });
+    menuBtn.addEventListener('click', () => dropdownContent.classList.toggle('show'));
 
-    window.addEventListener('click', e => {
-      if(!e.target.matches('.menu-btn')){
-        dropdownContent.classList.remove('show');
-      }
-    });
-
-    // Carousel logic
-    const cards = document.querySelectorAll('.carousel-card');
-    const dots = document.querySelectorAll('.dot');
-    const leftArrow = document.querySelector('.arrow.left');
-    const rightArrow = document.querySelector('.arrow.right');
+    // Auto-slide events carousel
+    const wrapper = document.querySelector('.events-wrapper');
     let index = 0;
-    let interval = setInterval(nextSlide, 5000);
-
-    function showSlide(i){
-      cards.forEach(c => c.classList.remove('active'));
-      dots.forEach(d => d.classList.remove('active'));
-      cards[i].classList.add('active');
-      dots[i].classList.add('active');
-    }
-
-    function nextSlide(){ index = (index+1)%cards.length; showSlide(index); }
-    function prevSlide(){ index = (index-1+cards.length)%cards.length; showSlide(index); }
-
-    rightArrow.addEventListener('click', () => { nextSlide(); resetInterval(); });
-    leftArrow.addEventListener('click', () => { prevSlide(); resetInterval(); });
-    dots.forEach((dot,i)=>dot.addEventListener('click', ()=>{ index=i; showSlide(index); resetInterval(); }));
-
-    function resetInterval(){
-      clearInterval(interval);
-      interval = setInterval(nextSlide,5000);
-    }
-
-    // Clickable cards
-    cards.forEach(card => card.addEventListener('click', ()=>{
-      const target = card.getAttribute('data-link');
-      if(target) window.location.href = target;
-    }));
+    const cards = wrapper.querySelectorAll('.card');
+    const total = cards.length;
+    setInterval(() => {
+      index = (index + 1) % total;
+      wrapper.style.transform = `translateX(-${index * 320}px)`; // card width + gap
+      wrapper.style.transition = 'transform 0.5s ease-in-out';
+    }, 5000);
   </script>
 
 </body>
