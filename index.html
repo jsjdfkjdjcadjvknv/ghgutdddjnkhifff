@@ -18,7 +18,6 @@
         <img src="avl.svg" alt="logo" class="logo">
         <span class="brand-text">Auleaux Studios</span>
       </a>
-
       <nav class="nav">
         <div class="dropdown">
           <button class="menu-btn">Menu ▾</button>
@@ -32,43 +31,59 @@
             <a href="contact.html">Contact</a>
           </div>
         </div>
+        <div class="nav-links">
+          <a href="index.html" class="active">Home</a>
+          <a href="events.html">Events</a>
+          <a href="games.html">Games</a>
+          <a href="updates.html">Updates</a>
+          <a href="suggestions.html">Suggestions</a>
+        </div>
       </nav>
     </div>
   </header>
 
+  <!-- Events Carousel -->
   <section class="events-carousel">
-  <div class="carousel-wrapper">
-    <div class="carousel-card active" data-link="event1.html">
-      <h3>Game Jam 2025</h3>
-      <p class="muted">Our latest rapid development showcase.</p>
-    </div>
-    <div class="carousel-card" data-link="event2.html">
-      <h3>Dev Meetup</h3>
-      <p class="muted">Community and collaboration event.</p>
-    </div>
-    <div class="carousel-card" data-link="event3.html">
-      <h3>Beta Release</h3>
-      <p class="muted">Testing new multiplayer mechanics.</p>
-    </div>
-    <div class="carousel-card" data-link="event4.html">
-      <h3>Art Showcase</h3>
-      <p class="muted">Capturing imagination through creativity.</p>
-    </div>
-  </div>
-</section>
+    <div class="carousel-wrapper">
+      <div class="carousel-card active" data-link="event1.html">
+        <h3>Game Jam 2025</h3>
+        <p class="muted">Our latest rapid development showcase.</p>
+      </div>
+      <div class="carousel-card" data-link="event2.html">
+        <h3>Dev Meetup</h3>
+        <p class="muted">Community and collaboration event.</p>
+      </div>
+      <div class="carousel-card" data-link="event3.html">
+        <h3>Beta Release</h3>
+        <p class="muted">Testing new multiplayer mechanics.</p>
+      </div>
+      <div class="carousel-card" data-link="event4.html">
+        <h3>Art Showcase</h3>
+        <p class="muted">Capturing imagination through creativity.</p>
+      </div>
 
+      <!-- Arrows -->
+      <span class="arrow left">&#10094;</span>
+      <span class="arrow right">&#10095;</span>
+
+      <!-- Dots -->
+      <div class="dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+  </section>
 
   <!-- Hero Section -->
-  <section class="hero large">
+  <section class="hero">
     <div class="hero-content">
       <h1>Welcome to <span class="highlight">Auleaux Studios</span></h1>
       <p>Crafting immersive multiplayer experiences that connect and inspire players worldwide.</p>
       <a href="games.html" class="btn primary">Explore Games</a>
     </div>
   </section>
-
-  <!-- Full-width Events Carousel -->
- 
 
   <!-- Contact Section -->
   <section class="section contact container">
@@ -90,17 +105,54 @@
     </div>
   </footer>
 
+  <!-- JS Carousel + Dropdown -->
   <script>
-    // Make event cards clickable
-    document.querySelectorAll('.events-wrapper .card').forEach(card => {
-      card.addEventListener('click', () => {
-        const target = card.getAttribute('data-link');
-        if (target) window.location.href = target;
-      });
+    // Dropdown toggle
+    const menuBtn = document.querySelector('.menu-btn');
+    const dropdownContent = document.querySelector('.dropdown-content');
+    menuBtn.addEventListener('click', () => {
+      dropdownContent.classList.toggle('show');
     });
+
+    window.addEventListener('click', e => {
+      if(!e.target.matches('.menu-btn')){
+        dropdownContent.classList.remove('show');
+      }
+    });
+
+    // Carousel logic
+    const cards = document.querySelectorAll('.carousel-card');
+    const dots = document.querySelectorAll('.dot');
+    const leftArrow = document.querySelector('.arrow.left');
+    const rightArrow = document.querySelector('.arrow.right');
+    let index = 0;
+    let interval = setInterval(nextSlide, 5000);
+
+    function showSlide(i){
+      cards.forEach(c => c.classList.remove('active'));
+      dots.forEach(d => d.classList.remove('active'));
+      cards[i].classList.add('active');
+      dots[i].classList.add('active');
+    }
+
+    function nextSlide(){ index = (index+1)%cards.length; showSlide(index); }
+    function prevSlide(){ index = (index-1+cards.length)%cards.length; showSlide(index); }
+
+    rightArrow.addEventListener('click', () => { nextSlide(); resetInterval(); });
+    leftArrow.addEventListener('click', () => { prevSlide(); resetInterval(); });
+    dots.forEach((dot,i)=>dot.addEventListener('click', ()=>{ index=i; showSlide(index); resetInterval(); }));
+
+    function resetInterval(){
+      clearInterval(interval);
+      interval = setInterval(nextSlide,5000);
+    }
+
+    // Clickable cards
+    cards.forEach(card => card.addEventListener('click', ()=>{
+      const target = card.getAttribute('data-link');
+      if(target) window.location.href = target;
+    }));
   </script>
 
 </body>
 </html>
-
-
