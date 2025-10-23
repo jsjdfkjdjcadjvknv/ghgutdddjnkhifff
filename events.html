@@ -4,9 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>@Auleaux | Events</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -19,11 +16,18 @@
         <span class="brand-text">Auleaux Studios</span>
       </a>
       <nav class="nav">
-        <a href="index.html">Home</a>
-        <a href="events.html" class="active">Events</a>
-        <a href="games.html">Games</a>
-        <a href="updates.html">Updates</a>
-        <a href="suggestions.html">Suggestions</a>
+        <div class="dropdown">
+          <button class="menu-btn">Menu ▾</button>
+          <div class="dropdown-content">
+            <a href="index.html">Home</a>
+            <a href="events.html" class="active">Events</a>
+            <a href="games.html">Games</a>
+            <a href="updates.html">Updates</a>
+            <a href="suggestions.html">Suggestions</a>
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact</a>
+          </div>
+        </div>
       </nav>
     </div>
   </header>
@@ -49,7 +53,6 @@
           <p>Capturing imagination through creativity.</p>
         </div>
       </div>
-
       <div class="gallery-item">
         <video autoplay muted loop>
           <source src="event1.mp4" type="video/mp4">
@@ -59,7 +62,6 @@
           <p>Watch the energy and passion that fuels Auleaux.</p>
         </div>
       </div>
-
       <div class="gallery-item">
         <img src="gallery2.jpg" alt="Event 2">
         <div class="overlay">
@@ -80,6 +82,13 @@
       </nav>
     </div>
   </footer>
+
+  <script>
+    // ===== Dropdown =====
+    const menuBtn = document.querySelector('.menu-btn');
+    const dropdownContent = document.querySelector('.dropdown-content');
+    menuBtn.addEventListener('click', () => dropdownContent.classList.toggle('show'));
+  </script>
 
 </body>
 </html>
