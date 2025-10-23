@@ -15,24 +15,25 @@
         <img src="avl.svg" alt="logo" class="logo">
         <span class="brand-text">Auleaux Studios</span>
       </a>
-      <nav class="nav">
-        <div class="dropdown">
-          <button class="menu-btn">Menu ▾</button>
-          <div class="dropdown-content">
-            <a href="index.html" class="active">Home</a>
-            <a href="events.html">Events</a>
-            <a href="games.html">Games</a>
-            <a href="updates.html">Updates</a>
-            <a href="suggestions.html">Suggestions</a>
-            <a href="about.html">About Us</a>
-            <a href="contact.html">Contact</a>
-          </div>
+
+      <!-- Dropdown Menu -->
+      <div class="dropdown">
+        <button class="menu-btn">Menu ▾</button>
+        <div class="dropdown-content">
+          <a href="index.html" class="active">Home</a>
+          <a href="events.html">Events</a>
+          <a href="games.html">Games</a>
+          <a href="updates.html">Updates</a>
+          <a href="suggestions.html">Suggestions</a>
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact</a>
         </div>
-      </nav>
+      </div>
+
     </div>
   </header>
 
-  <!-- Events Carousel -->
+  <!-- Events Slider -->
   <section class="events-carousel">
     <button class="carousel-btn prev">&#10094;</button>
     <div class="events-wrapper">
@@ -98,12 +99,14 @@
   </footer>
 
   <script>
-    // ===== Dropdown =====
+    // Dropdown toggle
     const menuBtn = document.querySelector('.menu-btn');
     const dropdownContent = document.querySelector('.dropdown-content');
-    menuBtn.addEventListener('click', () => dropdownContent.classList.toggle('show'));
+    menuBtn.addEventListener('click', () => {
+      dropdownContent.classList.toggle('show');
+    });
 
-    // ===== Carousel =====
+    // Events carousel
     const wrapper = document.querySelector('.events-wrapper');
     const cards = document.querySelectorAll('.events-wrapper .card');
     const prevBtn = document.querySelector('.carousel-btn.prev');
@@ -115,14 +118,18 @@
       else if(index >= cards.length) currentIndex = 0;
       else currentIndex = index;
 
-      wrapper.style.transform = `translateX(-${cards[0].offsetWidth * currentIndex}px)`;
+      // Show one card at a time
+      const cardWidth = wrapper.offsetWidth;
+      wrapper.style.transform = `translateX(-${cardWidth * currentIndex}px)`;
     }
 
     prevBtn.addEventListener('click', () => showCard(currentIndex - 1));
     nextBtn.addEventListener('click', () => showCard(currentIndex + 1));
 
+    // Auto-slide
     setInterval(() => showCard(currentIndex + 1), 5000);
 
+    // Make cards clickable
     cards.forEach(card => {
       card.addEventListener('click', () => {
         const target = card.getAttribute('data-link');
@@ -130,7 +137,15 @@
       });
     });
 
+    // Initialize
     showCard(0);
+
+    // Close dropdown if clicked outside
+    window.addEventListener('click', (e) => {
+      if (!menuBtn.contains(e.target) && !dropdownContent.contains(e.target)) {
+        dropdownContent.classList.remove('show');
+      }
+    });
   </script>
 
 </body>
