@@ -152,11 +152,11 @@ a {
    Events Carousel
 ======================= */
 .events-carousel {
-  width: 100%;
+  width: 100vw;
   overflow: hidden;
-  margin: 2rem auto;
+  margin: 2rem 0;
   max-width: 1200px;
-  padding: 1rem 0;
+  padding: 2rem 0;
   position: relative;
 }
 .events-wrapper {
@@ -164,17 +164,19 @@ a {
   transition: transform 0.5s ease;
 }
 .events-wrapper .card {
-  flex: 0 0 100%;
-  margin: auto;
+  flex: 0 0 100vw;
+  margin: 0;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   cursor: pointer;
   background: #fff;
 }
 .events-wrapper .card img {
   width: 100%;
   display: block;
+  height: auto;
+  object-fit: cover;
 }
 .card-info {
   padding: 1rem;
@@ -193,7 +195,7 @@ a {
   background: rgba(0,0,0,0.4);
   color: #fff;
   border: none;
-  font-size: 24px;
+  font-size: 30px;  /*arrow size*/
   cursor: pointer;
   padding: 10px;
   border-radius: 50%;
@@ -265,4 +267,5 @@ a {
     padding: 8px;
   }
 }
+
 
