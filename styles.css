@@ -1,280 +1,66 @@
-/* =======================
-   Global Styles
-======================= */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-body {
-  font-family: 'Inter', sans-serif;
-  line-height: 1.6;
-  color: #222;
-  background: #f9f9f9;
-}
-a {
-  text-decoration: none;
-  color: inherit;
-}
-.container {
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto;
+/* ===== Global ===== */
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;line-height:1.6;color:#222;background:#f9f9f9}
+a{text-decoration:none;color:inherit}
+.container{width:90%;max-width:1200px;margin:0 auto}
+
+/* ===== Header ===== */
+.site-header{width:100%;background:#fff;padding:1rem 0;border-bottom:1px solid #ddd;position:sticky;top:0;z-index:1000}
+.header-inner{display:flex;justify-content:space-between;align-items:center}
+.brand{display:flex;align-items:center;gap:.5rem}
+.brand .logo{width:40px}
+.nav a{padding:.5rem 1rem;border-radius:5px;transition:.2s}
+.nav a:hover,.nav a.active{background:#222;color:#fff}
+
+/* ===== Menu (Dropdown) ===== */
+.dropdown{position:relative}
+.menu-btn{display:none;background:#222;color:#fff;border:none;padding:.5rem 1rem;border-radius:5px;cursor:pointer}
+.dropdown-content{display:flex;gap:1rem}
+@media(max-width:768px){
+  .nav{display:none}
+  .menu-btn{display:block}
+  .dropdown-content{flex-direction:column;position:absolute;top:2.5rem;right:0;background:#fff;border:1px solid #ddd;padding:.5rem 1rem;display:none}
+  .dropdown:hover .dropdown-content{display:flex}
 }
 
-/* =======================
-   Header
-======================= */
-.site-header {
-  width: 100%;
-  background: #fff;
-  padding: 1rem 0;
-  border-bottom: 1px solid #ddd;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-.header-inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.brand .logo {
-  width: 40px;
-}
-.nav a {
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  transition: 0.2s;
-}
-.nav a:hover,
-.nav a.active {
-  background: #222;
-  color: #fff;
-}
+/* ===== Hero ===== */
+.hero{text-align:center;background:#f0f0f5;padding:5rem 0}
+.hero .highlight{color:#ff3c00}
+.hero h1{font-size:2.5rem;margin-bottom:1rem}
+.hero p{font-size:1.2rem;margin-bottom:2rem}
 
-/* =======================
-   Dropdown / Mobile Menu
-======================= */
-.dropdown {
-  position: relative;
-}
-.menu-btn {
-  display: none;
-  background: #222;
-  color: #fff;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.dropdown-content {
-  display: flex;
-  gap: 1rem;
-}
-@media (max-width: 768px) {
-  .nav {
-    display: none;
-  }
-  .menu-btn {
-    display: block;
-  }
-  .dropdown-content {
-    flex-direction: column;
-    position: absolute;
-    top: 2.8rem;
-    right: 0;
-    background: #fff;
-    border: 1px solid #ddd;
-    padding: 0.5rem 1rem;
-    display: none;
-  }
-  .dropdown:hover .dropdown-content {
-    display: flex;
-  }
-}
+/* ===== Buttons ===== */
+.btn{display:inline-block;padding:.5rem 1.5rem;border-radius:5px;font-weight:600;cursor:pointer;transition:.2s;text-align:center}
+.btn.primary{background:#ff3c00;color:#fff}
+.btn.secondary{background:#fff;color:#ff3c00;border:1px solid #ff3c00}
+.btn:hover{transform:translateY(-2px)}
 
-/* =======================
-   Hero
-======================= */
-.hero {
-  padding: 3rem 0;
-  text-align: center;
-  background: #f0f0f5;
-}
-.hero.large {
-  padding: 5rem 0;
-}
-.hero .highlight {
-  color: #ff3c00;
-}
-.hero h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-.hero p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-}
+/* ===== Events Carousel ===== */
+.events-carousel{width:100vw;height:90vh;overflow:hidden;position:relative;margin:0;padding:0}
+.events-wrapper{display:flex;width:100%;transition:transform .5s ease}
+.events-wrapper .card{flex:0 0 100vw;width:100vw;height:90vh;margin:0;border-radius:0;overflow:hidden;background:#000;cursor:pointer}
+.events-wrapper .card img{width:100%;height:100%;object-fit:cover;display:block}
+.card-info{position:absolute;bottom:20px;left:20px;color:#fff;background:rgba(0,0,0,.5);padding:10px 15px;border-radius:5px}
+.card-info h3{margin-bottom:.3rem}
+.card-info .muted{color:#ddd}
+.carousel-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.4);color:#fff;border:none;font-size:30px;cursor:pointer;padding:10px;border-radius:50%;z-index:5}
+.carousel-btn.prev{left:15px}
+.carousel-btn.next{right:15px}
 
-/* =======================
-   Buttons
-======================= */
-.btn {
-  display: inline-block;
-  padding: 0.5rem 1.5rem;
-  border-radius: 5px;
-  font-weight: 600;
-  cursor: pointer;
-  text-align: center;
-  transition: 0.2s;
-}
-.btn.primary {
-  background: #ff3c00;
-  color: #fff;
-  border: none;
-}
-.btn.secondary {
-  background: #fff;
-  color: #ff3c00;
-  border: 1px solid #ff3c00;
-}
-.btn:hover {
-  transform: translateY(-2px);
-}
+/* ===== Gallery (Events Page) ===== */
+.gallery-grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-top:2rem}
+.gallery-item{position:relative;overflow:hidden;border-radius:10px}
+.gallery-item img,.gallery-item video{width:100%;display:block}
+.gallery-item .overlay{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);color:#fff;padding:10px;opacity:0;transition:.3s}
+.gallery-item:hover .overlay{opacity:1}
 
-/* =======================
-   Events Carousel
-======================= */
-.events-carousel {
-  position: relative;
-  width: 100%;
-  margin: 0;
-  background: #f5f5f7;
-  padding: 0;
-  overflow: hidden;
-}
+/* ===== Footer ===== */
+.contact-info a{color:#ff3c00}
+.site-footer{background:#222;color:#fff;padding:2rem 0;text-align:center}
+.site-footer a{color:#fff;margin-left:1rem}
 
-.events-carousel .container {
-  width: 100%;
-  max-width: none;
-  padding: 0;
-  margin: 0;
+/* ===== Responsive ===== */
+@media(max-width:768px){
+  .events-wrapper .card{height:70vh}
+  .carousel-btn{font-size:22px;padding:8px}
 }
-
-.events-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: transform 0.6s ease;
-  gap: 0;
-}
-
-.events-wrapper .card {
-  flex: 0 0 100vw;
-  height: 70hv;
-  border-radius: 0;
-  overflow: hidden;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-  background: #fff;
-}
-
-.events-wrapper .card img {
-  width: 100%;
-  height: 70vh; /* increased height */
-  object-fit: cover;
-  display: block;
-}
-
-.card-info {
-  padding: 1.5rem;
-  text-align: center;
-}
-
-/* Carousel Buttons */
-.carousel-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.4);
-  color: #fff;
-  border: none;
-  font-size: 32px;
-  cursor: pointer;
-  padding: 14px;
-  border-radius: 50%;
-  z-index: 10;
-  transition: 0.2s;
-}
-.carousel-btn:hover {
-  background: rgba(0,0,0,0.6);
-}
-.carousel-btn.prev { left: 20px; }
-.carousel-btn.next { right: 20px; }
-
-@media (max-width: 768px) {
-  .events-wrapper .card img {
-    height: 55vh;
-  }
-  .carousel-btn {
-    font-size: 22px;
-    padding: 8px;
-  }
-}
-
-/* =======================
-   Gallery (Events page)
-======================= */
-.gallery-grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  margin-top: 2rem;
-}
-.gallery-item {
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
-}
-.gallery-item img,
-.gallery-item video {
-  width: 100%;
-  display: block;
-}
-.gallery-item .overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0,0,0,0.6);
-  color: #fff;
-  padding: 10px;
-  opacity: 0;
-  transition: 0.3s;
-}
-.gallery-item:hover .overlay {
-  opacity: 1;
-}
-
-/* =======================
-   Contact & Footer
-======================= */
-.contact-info a { color: #ff3c00; }
-.site-footer {
-  background: #222;
-  color: #fff;
-  padding: 2rem 0;
-}
-.site-footer a { color: #fff; margin-left: 1rem; }
-.site-footer .foot-nav {
-  display: flex;
-  justify-content: center;
-  margin-top: 0.5rem;
-  gap: 1rem;
-}
-
