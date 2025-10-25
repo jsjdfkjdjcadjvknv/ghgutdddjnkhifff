@@ -5,7 +5,7 @@ a{text-decoration:none;color:inherit}
 .container{width:90%;max-width:1200px;margin:0 auto;height:150%}
 
 /*Header*/
-.site-header{width:100%;background:#00aaff71;padding:1rem 0;border-bottom:1px solid #ddd;position:sticky;top:0;z-index:1000;height:0px}
+.site-header{width:100%;padding:2rem 0;position:sticky;top:0;z-index:1000;height:0px}
 .header-inner{display:flex;justify-content:space-between;align-items:center}
 .brand{display:flex;align-items:center;gap:1rem}
 .brand .logo{width:150px}
@@ -64,3 +64,4 @@ a{text-decoration:none;color:inherit}
   .events-wrapper .card{height:70vh}
   .carousel-btn{font-size:22px;padding:8px}
 }
+
