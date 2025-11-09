@@ -3,39 +3,56 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  
-  <title>Auleaux Studios - Official Indie Game Development Studio</title>
+
+  <title>Auleaux Studios – Official Indie Game Development Studio</title>
   <meta name="description" content="Auleaux Studios is an indie game development studio crafting immersive multiplayer experiences that connect and inspire players worldwide.">
+
+  <!-- Open Graph -->
   <meta property="og:site_name" content="Auleaux Studios">
   <meta property="og:title" content="Auleaux Studios">
-  <meta property="og:description" content="Official site of Auleaux Studios, creators of thrilling multiplayer experience games.">
+  <meta property="og:description" content="Official site of Auleaux Studios, creators of competitive multiplayer games.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://auleauxstudios.netlify.app/">
+  <meta property="og:image" content="https://auleauxstudios.netlify.app/favicon-512.png">
 
-  <meta name="keywords" content="Auleaux Studios, indie games, multiplayer, game dev, AUL, Auleaux, Netlify, shooter, development, studios">
+  <!-- SEO Metadata -->
+  <meta name="keywords" content="Auleaux Studios, indie games, multiplayer, shooter, game dev, AUL, Auleaux, Netlify, development, studios">
   <meta name="author" content="Auleaux Studios Official">
   <meta name="robots" content="index, follow">
   <meta name="google-site-verification" content="vKmEj1xzjYLPs37nVQ0APITBE5fTkcnviV3WgqyZEXU" />
 
   <link rel="canonical" href="https://auleauxstudios.netlify.app/">
-  <link rel="icon" href="https://auleauxstudios.netlify.app/avl.png" type="image/png">
-  <link rel="apple-touch-icon" href="https://auleauxstudios.netlify.app/avl.png">
+
+  <!-- 👇 Separate logos for site and Google -->
+  <!-- In-website logo (for your navbar/UI) -->
+  <link rel="preload" as="image" href="https://auleauxstudios.netlify.app/avl.svg">
+
+  <!-- Favicon and Google logo -->
+  <link rel="icon" type="image/png" sizes="48x48" href="https://auleauxstudios.netlify.app/favicon-google.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="https://auleauxstudios.netlify.app/favicon-512.png">
+  <link rel="apple-touch-icon" href="https://auleauxstudios.netlify.app/favicon-512.png">
+  <meta name="theme-color" content="#000000">
+
   <link rel="stylesheet" href="styles.css">
-  
+
+  <!-- Structured Data for Google -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Auleaux Studios",
     "url": "https://auleauxstudios.netlify.app/",
-    "logo": "https://auleauxstudios.netlify.app/avl.png",
+    "logo": "https://auleauxstudios.netlify.app/favicon-512.png",
     "sameAs": [
       "https://www.instagram.com/auleauxstudios",
       "https://www.youtube.com/@auleauxstudios",
       "https://x.com/auleauxstudios",
-      "https://linked.com/auleauxstudios"
+      "https://linkedin.com/company/auleauxstudios"
     ]
   }
   </script>
 </head>
+
 
 <body>
 
@@ -43,7 +60,7 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="index.html">
-        <img src="avl.png" alt="Auleaux Studios Logo" class="logo">
+        <img src="avl.svg" alt="Auleaux Studios Logo" class="logo">
         <span class="brand-text">@Auleaux Studios</span>
       </a>
 
@@ -179,6 +196,7 @@
 
 </body>
 </html>
+
 
 
 
