@@ -1,40 +1,36 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <!-- ================= CORE ================= -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Auleaux Studios – Official Indie Game Development Studio</title>
-  <meta name="description" content="Auleaux Studios is an indie game development studio crafting immersive multiplayer experiences that connect and inspire players worldwide.">
+  <title>Auleaux Studios – Indie Multiplayer Game Studio</title>
+  <meta name="description" content="Auleaux Studios is an indie game development studio crafting immersive multiplayer experiences that connect players worldwide.">
 
-  <!-- Open Graph (for social previews) -->
+  <!-- ================= SEO / SEARCH ================= -->
+  <meta name="google-site-verification" content="vKmEj1xzjYLPs37nVQ0APITBE5fTkcnviV3WgqyZEXU">
+  <link rel="canonical" href="https://auleauxstudios.netlify.app/">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Auleaux Studios Official">
+
+  <!-- ================= OPEN GRAPH ================= -->
   <meta property="og:site_name" content="Auleaux Studios">
   <meta property="og:title" content="Auleaux Studios">
-  <meta property="og:description" content="Official site of Auleaux Studios, creators of competitive multiplayer games.">
+  <meta property="og:description" content="Creators of competitive multiplayer games.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://auleauxstudios.netlify.app/">
   <meta property="og:image" content="https://auleauxstudios.netlify.app/favicon-512.png">
 
-  <!-- SEO Metadata -->
-  <meta name="keywords" content="Auleaux Studios, indie games, multiplayer, shooter, game dev, AUL, Auleaux, Netlify, development, studios">
-  <meta name="author" content="Auleaux Studios Official">
-  <meta name="robots" content="index, follow">
-  <meta name="google-site-verification" content="vKmEj1xzjYLPs37nVQ0APITBE5fTkcnviV3WgqyZEXU">
-
-  <link rel="canonical" href="https://auleauxstudios.netlify.app/">
-
-  <!-- Main in-site logo -->
-  <link rel="preload" as="image" href="https://auleauxstudios.netlify.app/avl.svg">
-
-  <!-- Favicons -->
-  <link rel="icon" type="image/png" sizes="48x48" href="https://auleauxstudios.netlify.app/favicon-google.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="https://auleauxstudios.netlify.app/favicon-512.png">
-  <link rel="apple-touch-icon" href="https://auleauxstudios.netlify.app/favicon-512.png">
+  <!-- ================= ASSETS ================= -->
+  <link rel="preload" as="image" href="avl.svg">
+  <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
+  <link rel="apple-touch-icon" href="favicon-512.png">
   <meta name="theme-color" content="#000000">
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Structured Data (tells Google which logo to show externally) -->
+  <!-- ================= STRUCTURED DATA ================= -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -51,156 +47,141 @@
   }
   </script>
 </head>
-  
+
 <body>
 
-  <!-- Header -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="index.html">
-        <img src="avl.svg" alt="Auleaux Studios Logo" class="logo">
-        <span class="brand-text">@Auleaux Studios</span>
-      </a>
+<!-- ================= HEADER ================= -->
+<header class="site-header">
+  <div class="container header-inner">
 
-      <!-- Dropdown Menu -->
-      <div class="dropdown">
-        <button class="menu-btn">More</button>
-        <div class="dropdown-content">
-          <a href="index.html" class="active">Home</a>
-          <a href="events.html">Events</a>
-          <a href="games.html">Games</a>
-          <a href="updates.html">Updates</a>
-          <a href="suggestions.html">Suggestions</a>
-          <a href="about.html">About Us</a>
-          <a href="contact.html">Contact</a>
-        </div>
-      </div>
-    </div>
-  </header>
+    <a href="index.html" class="brand">
+      <img src="avl.svg" alt="Auleaux Studios Logo" class="logo">
+      <span class="brand-text">Auleaux Studios</span>
+    </a>
 
-  <!-- Events Slider -->
-  <section class="events-carousel">
-    <button class="carousel-btn prev">&#10094;</button>
-    <div class="events-wrapper">
-      <div class="card" data-link="event1.html">
-        <img src="gallery1.jpg" alt="Event 1">
-        <div class="card-info">
-          <h3>Game Jam 2025</h3>
-          <p class="muted">Our latest rapid development showcase.</p>
-        </div>
-      </div>
-      <div class="card" data-link="event2.html">
-        <img src="gallery2.jpg" alt="Event 2">
-        <div class="card-info">
-          <h3>Dev Meetup</h3>
-          <p class="muted">Community and collaboration event.</p>
-        </div>
-      </div>
-      <div class="card" data-link="event3.html">
-        <img src="gallery3.jpg" alt="Event 3">
-        <div class="card-info">
-          <h3>Beta Release</h3>
-          <p class="muted">Testing new multiplayer mechanics.</p>
-        </div>
-      </div>
-      <div class="card" data-link="event4.html">
-        <img src="gallery4.jpg" alt="Event 4">
-        <div class="card-info">
-          <h3>Art Showcase</h3>
-          <p class="muted">Capturing imagination through creativity.</p>
-        </div>
-      </div>
-    </div>
-    <button class="carousel-btn next">&#10095;</button>
-  </section>
+    <nav class="main-nav">
+      <a href="index.html" class="active">Home</a>
+      <a href="games.html">Games</a>
+      <a href="events.html">Events</a>
+      <a href="updates.html">Updates</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
 
-  <!-- Hero Section -->
-  <section class="hero large">
-    <div class="hero-content">
-      <h1>Welcome to <span class="highlight">Auleaux Studios</span></h1>
-      <p>Crafting immersive multiplayer experiences that connect and inspire players worldwide.</p>
-      <a href="games.html" class="btn primary">Explore Games</a>
-    </div>
-  </section>
+    <button class="nav-toggle" aria-label="Toggle menu">☰</button>
 
-  <!-- Contact Section -->
-  <section class="section contact container">
-    <h2 class="section-title">Get in Touch</h2>
-    <p>Have queries or want to give feedback? Reach out to us anytime.</p>
-    <p class="contact-info">
-      <strong>Email:</strong> <a href="mailto:auleauxstudios@gmail.com">auleauxstudios@gmail.com</a>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="container hero-content">
+    <h1>
+      Building <span class="highlight">Multiplayer Worlds</span><br>
+      That Players Remember
+    </h1>
+    <p>
+      We are an indie studio focused on competitive, community-driven games.
     </p>
-  </section>
+    <a href="games.html" class="btn primary">Explore Games</a>
+  </div>
+</section>
 
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <small>© 2025 Auleaux Studios. All Rights Reserved.</small>
-      <nav class="foot-nav">
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms & Conditions</a>
-      </nav>
+<!-- ================= EVENTS ================= -->
+<section class="section events">
+  <div class="container">
+
+    <header class="section-header">
+      <h2>Latest Events</h2>
+      <p class="muted">What we’ve been building recently.</p>
+    </header>
+
+    <div class="events-carousel">
+      <button class="carousel-btn prev" aria-label="Previous">&#10094;</button>
+
+      <div class="events-track">
+        <article class="event-card" data-link="event1.html">
+          <img src="gallery1.jpg" alt="Game Jam 2025">
+          <h3>Game Jam 2025</h3>
+          <p>Rapid development showcase.</p>
+        </article>
+
+        <article class="event-card" data-link="event2.html">
+          <img src="gallery2.jpg" alt="Dev Meetup">
+          <h3>Dev Meetup</h3>
+          <p>Community collaboration.</p>
+        </article>
+
+        <article class="event-card" data-link="event3.html">
+          <img src="gallery3.jpg" alt="Beta Release">
+          <h3>Beta Release</h3>
+          <p>Testing new mechanics.</p>
+        </article>
+
+        <article class="event-card" data-link="event4.html">
+          <img src="gallery4.jpg" alt="Art Showcase">
+          <h3>Art Showcase</h3>
+          <p>Creative highlights.</p>
+        </article>
+      </div>
+
+      <button class="carousel-btn next" aria-label="Next">&#10095;</button>
     </div>
-  </footer>
+  </div>
+</section>
 
-  <script>
-    // Dropdown toggle
-    const menuBtn = document.querySelector('.menu-btn');
-    const dropdownContent = document.querySelector('.dropdown-content');
-    menuBtn.addEventListener('click', () => {
-      dropdownContent.classList.toggle('show');
+<!-- ================= CONTACT ================= -->
+<section class="section contact">
+  <div class="container">
+    <h2>Get in Touch</h2>
+    <p>Questions, feedback, or collaborations?</p>
+    <p>
+      <strong>Email:</strong>
+      <a href="mailto:auleauxstudios@gmail.com">auleauxstudios@gmail.com</a>
+    </p>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <small>© 2025 Auleaux Studios. All rights reserved.</small>
+    <nav class="footer-nav">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- ================= JS ================= -->
+<script>
+  // Mobile nav
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.querySelector('.main-nav');
+  toggle.addEventListener('click', () => nav.classList.toggle('open'));
+
+  // Carousel
+  const track = document.querySelector('.events-track');
+  const cards = document.querySelectorAll('.event-card');
+  let index = 0;
+
+  function moveCarousel(dir) {
+    index = (index + dir + cards.length) % cards.length;
+    cards[index].scrollIntoView({ behavior: 'smooth', inline: 'center' });
+  }
+
+  document.querySelector('.carousel-btn.prev').onclick = () => moveCarousel(-1);
+  document.querySelector('.carousel-btn.next').onclick = () => moveCarousel(1);
+
+  setInterval(() => moveCarousel(1), 5000);
+
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      const link = card.dataset.link;
+      if (link) window.location.href = link;
     });
-
-    // Events carousel
-    const wrapper = document.querySelector('.events-wrapper');
-    const cards = document.querySelectorAll('.events-wrapper .card');
-    const prevBtn = document.querySelector('.carousel-btn.prev');
-    const nextBtn = document.querySelector('.carousel-btn.next');
-    let currentIndex = 0;
-
-    function showCard(index) {
-      if(index < 0) currentIndex = cards.length - 1;
-      else if(index >= cards.length) currentIndex = 0;
-      else currentIndex = index;
-
-      const cardWidth = wrapper.offsetWidth;
-      wrapper.style.transform = `translateX(-${cardWidth * currentIndex}px)`;
-    }
-
-    prevBtn.addEventListener('click', () => showCard(currentIndex - 1));
-    nextBtn.addEventListener('click', () => showCard(currentIndex + 1));
-
-    // Auto-slide every 5 seconds
-    setInterval(() => showCard(currentIndex + 1), 5000);
-
-    // Make cards clickable
-    cards.forEach(card => {
-      card.addEventListener('click', () => {
-        const target = card.getAttribute('data-link');
-        if(target) window.location.href = target;
-      });
-    });
-
-    // Initialize
-    showCard(0);
-
-    // Close dropdown if clicked outside
-    window.addEventListener('click', (e) => {
-      if (!menuBtn.contains(e.target) && !dropdownContent.contains(e.target)) {
-        dropdownContent.classList.remove('show');
-      }
-    });
-  </script>
+  });
+</script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
