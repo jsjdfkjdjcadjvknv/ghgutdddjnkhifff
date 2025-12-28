@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>@Auleaux | Suggestions</title>
+  <meta name="description" content="Submit suggestions to Auleaux Studios and vote for the most important ideas.">
+  <link rel="icon" href="favicon-512.png">
+  <meta name="theme-color" content="#000000">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Supabase UMD -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.1/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand">
+      <img src="avl.svg">
+      Auleaux Studios
+    </a>
+
+    <nav class="nav-desktop">
+      <a href="index.html">Home</a>
+      <a href="games.html">Games</a>
+      <a href="events.html">Events</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a class="active" href="suggestions.html">Suggestions</a>
+    </nav>
+
+    <button class="menu-btn" aria-label="Menu">☰</button>
+  </div>
+
+  <nav class="nav-mobile">
+    <a href="index.html">Home</a>
+    <a href="games.html">Games</a>
+    <a href="events.html">Events</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a class="active" href="suggestions.html">Suggestions</a>
+  </nav>
+</header>
+
+<!-- ================= MAIN SECTION ================= -->
+<main class="section container">
+  <h1>Suggestions</h1>
+  <p class="section-desc">Submit your ideas to help improve Auleaux Studios products. The most liked suggestions get implemented first.</p>
+
+  <!-- Instructional Modal -->
+  <div id="instructions-modal" class="modal">
+    <div class="modal-content">
+      <h2>How to Use This Page</h2>
+      <ul>
+        <li><strong>Login:</strong> Click "Login with Google" to authenticate.</li>
+        <li><strong>Pick a Topic:</strong> Choose the topic you want to suggest ideas for.</li>
+        <li><strong>Submit:</strong> Type your suggestion under the selected topic. Keep it under 150 words.</li>
+        <li><strong>Vote:</strong> Click 👍 on suggestions to vote for the ones you like.</li>
+        <li><strong>Delete:</strong> You can delete your own suggestions with the 🗑 button.</li>
+        <li><strong>Be Respectful:</strong> Public suggestions only. No personal info or spam.</li>
+      </ul>
+      <button class="btn primary" id="modal-close-btn">Got it!</button>
+    </div>
+  </div>
+
+  <!-- Authentication -->
+  <div id="auth">
+    <button id="login-btn" class="btn primary">Login with Google</button>
+    <p id="user-info"></p>
+    <button id="logout-btn" class="btn secondary" style="display:none;">Logout</button>
+  </div>
+
+  <!-- Topic Selection -->
+  <div id="topic-selection" style="display:none;" class="section container">
+    <h2>Select a Topic</h2>
+    <p>Choose the topic you want to suggest ideas for:</p>
+    <div id="topics-list" class="cards"></div>
+  </div>
+
+  <!-- Suggestion Form -->
+  <div id="suggestion-form-container" style="display:none;">
+    <h3 id="current-topic-title"></h3>
+    <form id="suggestion-form" class="suggestion-form">
+      <textarea id="suggestion-input" placeholder="Type your suggestion..."></textarea>
+      <button type="submit" class="btn primary">Submit</button>
+      <span id="word-counter" style="margin-left:10px;font-size:0.9em;color:#555;">0/150 words</span>
+    </form>
+  </div>
+
+  <!-- Suggestions List -->
+  <div id="suggestions-list" class="cards"></div>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="container">
+    <p>Email us: <a href="mailto:auleauxstudios@gmail.com" class="footer-email">auleauxstudios@gmail.com</a></p>
+    <p>
+      <a href="terms.html">Terms & Conditions</a> | 
+      <a href="privacy.html">Privacy Policy</a>
+    </p>
+    <p>© 2025 Auleaux Studios. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

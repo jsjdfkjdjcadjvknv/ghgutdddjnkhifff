@@ -1,0 +1,198 @@
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,system-ui,sans-serif;background:#0b0c10;color:#e6e6eb;line-height:1.7}
+a{text-decoration:none;color:inherit}
+img{width:100%;height:100%;object-fit:cover;display:block}
+.container{width:90%;max-width:1200px;margin:auto}
+
+/* Header */
+.site-header{position:sticky;top:0;background:rgba(11,12,16,.65);backdrop-filter:blur(10px);border-bottom:1px solid #1f2028;z-index:1000}
+.header-inner{height:72px;display:flex;justify-content:space-between;align-items:center}
+.brand{display:flex;gap:1rem;align-items:center;font-weight:700}
+.brand img{height:42px}
+
+.nav-desktop{display:flex}
+nav a{margin-left:1.5rem;color:#a1a1aa}
+nav a:hover,nav a.active{color:#fff}
+
+.menu-btn{display:none;background:none;border:none;color:#fff;font-size:28px;cursor:pointer}
+
+.nav-mobile{display:none;flex-direction:column;background:rgba(11,12,16,.95);border-top:1px solid #1f2028}
+.nav-mobile a{padding:1.2rem;border-bottom:1px solid #1f2028}
+
+/* Hero */
+.hero{text-align:center;padding:7rem 0;background:radial-gradient(900px 500px at 50% -10%,rgba(0,170,255,.25),transparent)}
+.hero h1{font-size:clamp(2.4rem,5vw,3.6rem);line-height:1.1;margin-bottom:1rem}
+.highlight{color:#00aaff}
+.hero p{color:#a1a1aa;max-width:700px;margin:0 auto 2rem}
+.btn{display:inline-block;padding:.9rem 2.2rem;background:#00aaff;color:#000;border-radius:12px;font-weight:600}
+
+/* Carousel */
+.events-carousel{width:100vw;height:90vh;overflow:hidden;position:relative}
+.events-wrapper{display:flex;height:100%;transition:transform .5s ease}
+.card{flex:0 0 100vw;height:100%;position:relative}
+.card-info{position:absolute;bottom:30px;left:30px;background:rgba(0,0,0,.6);padding:16px 22px;border-radius:12px}
+.carousel-btn{position:absolute;top:50%;transform:translateY(-50%);background:none;border:none;font-size:32px;color:#fff;cursor:pointer}
+.prev{left:20px}
+.next{right:20px}
+
+/* Sections */
+.section{padding:6rem 0}
+.section h2{text-align:center;font-size:2.4rem;margin-bottom:1rem}
+.section-desc{text-align:center;color:#a1a1aa;max-width:700px;margin:0 auto 4rem}
+
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2rem}
+.card-box{background:#111218;border:1px solid #1f2028;border-radius:16px;padding:2rem}
+.card-box p{color:#a1a1aa}
+
+.timeline{max-width:900px;margin:auto}
+.step{display:flex;gap:2rem;margin-bottom:3rem}
+.step span{font-size:1.6rem;color:#00aaff;font-weight:700}
+.step p{color:#a1a1aa}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;text-align:center}
+.stat strong{font-size:2.2rem;color:#00aaff}
+/* Remove blue flash / tap highlight on all buttons and links */
+button,
+a,
+.menu-btn,
+.carousel-btn {
+  -webkit-tap-highlight-color: transparent; /* mobile & chrome tap highlight */
+  outline: none;                             /* remove focus outline */
+  user-select: none;                          /* optional: prevents text selection flash */
+}
+.email{color:#00aaff}
+.contact{text-align:center;background:#111218}
+footer{text-align:center;padding:2rem;border-top:1px solid #1f2028;color:#a1a1aa}
+
+/* Mobile */
+@media(max-width:900px){
+  .nav-desktop{display:none}
+  .menu-btn{display:block}
+  .nav-mobile.active{display:flex}
+}
+
+/* ================== SUGGESTIONS PAGE ================== */
+
+/* Container adjustments */
+#topic-selection, #suggestion-form-container {
+  margin-top: 2rem;
+}
+
+/* Topic cards */
+.topic-card {
+  cursor: pointer;
+  padding: 2rem;
+  border-radius: 12px;
+  background: #111218;
+  border: 1px solid #1f2028;
+  text-align: center;
+  font-weight: 600;
+  transition: transform 0.2s, background 0.2s;
+}
+.topic-card:hover {
+  background: #1a1b24;
+  transform: translateY(-3px);
+}
+
+/* Current topic title and change button */
+#current-topic-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+#change-topic-btn {
+  margin-bottom: 2rem;
+}
+
+/* Suggestion form */
+.suggestion-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.suggestion-form textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid #1f2028;
+  background: #111218;
+  color: #e6e6eb;
+  resize: vertical;
+  font-size: 1rem;
+}
+.suggestion-form button {
+  align-self: flex-start;
+  padding: 0.8rem 2rem;
+}
+
+/* Word counter */
+#word-counter {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Suggestions list cards */
+#suggestions-list .card-box {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background: #111218;
+  border-radius: 12px;
+  border: 1px solid #1f2028;
+}
+#suggestions-list .card-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+#suggestions-list .btn.small {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.85rem;
+}
+
+/* Instruction modal */
+#instructions-modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.7);
+}
+#instructions-modal .modal-content {
+  background: #111218;
+  margin: 10% auto;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 500px;
+  color: #e6e6eb;
+  text-align: center;
+}
+#instructions-modal .close-btn {
+  color: #00aaff;
+  float: right;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+#instructions-modal h2 {
+  margin-top: 0;
+}
+#instructions-modal p {
+  margin-bottom: 1rem;
+  color: #a1a1aa;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .topic-card {
+    padding: 1.5rem;
+  }
+  .suggestion-form textarea {
+    min-height: 100px;
+  }
+}
