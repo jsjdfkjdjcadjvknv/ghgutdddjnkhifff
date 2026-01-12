@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
 
   // ==================== ELEMENTS ====================
   const loginBtn = document.getElementById("login-btn");
@@ -21,6 +21,72 @@ document.addEventListener("DOMContentLoaded", async () => {
     { id: 4, name: "Bug Reports" }
   ];
 
+  // ==================== LOGIN/LOGOUT ====================
+  async function login() {
+    const res = await fetch("/.netlify/functions/auth", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "login",
+        provider: "google",
+        redirectTo: window.location.origin + "/suggestions.html"
+      }),
+    });
+
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+  }
+
+  async function logout() {
+    await fetch("/.netlify/functions/auth", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "logout" }),
+    });
+    location.reload();
+  }
+
+  if (loginBtn) loginBtn.onclick = login;
+  if (logoutBtn) logoutBtn.onclick = logout;
+
+  // ==================== SESSION HANDLING ====================
+  async function getSession() {
+    try {
+      const res = await fetch("/.netlify/functions/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "getSession" }),
+      });
+      return await res.json();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async function updateUI() {
+    const session = await getSession();
+
+    if (session?.user) {
+      const user = session.user;
+      if (userInfo) userInfo.textContent = `Logged in as ${user.email}`;
+      if (loginBtn) loginBtn.style.display = "none";
+      if (logoutBtn) logoutBtn.style.display = "inline-block";
+      if (topicSelection) {
+        topicSelection.style.display = "block";
+        showTopics();
+      }
+      if (suggestionFormContainer) suggestionFormContainer.style.display = "block";
+    } else {
+      if (userInfo) userInfo.textContent = "";
+      if (loginBtn) loginBtn.style.display = "inline-block";
+      if (logoutBtn) logoutBtn.style.display = "none";
+      if (topicSelection) topicSelection.style.display = "none";
+      if (suggestionFormContainer) suggestionFormContainer.style.display = "none";
+      if (suggestionsList) suggestionsList.innerHTML = "";
+    }
+  }
+
+  // ==================== SHOW TOPICS ====================
   function showTopics() {
     if (!topicsList) return;
     topicsList.innerHTML = "";
@@ -69,16 +135,18 @@ document.addEventListener("DOMContentLoaded", async () => {
       const topicId = suggestionForm.dataset.topicId;
       if (!topicId) return;
 
-      // TEMPORARY TEST USER
-      const testUser = { id: "test-user", name: "Guest", email: "guest@example.com" };
+      const session = await getSession();
+      if (!session?.user) return alert("Please login first");
+
+      const user = session.user;
 
       const res = await fetch("/.netlify/functions/create-suggestion", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          user_id: testUser.id,
-          name: testUser.name,
-          email: testUser.email,
+          user_id: user.id,
+          name: user.user_metadata.full_name || user.email,
+          email: user.email,
           suggestion: text,
           topic_id: topicId,
         }),
@@ -111,7 +179,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <p>${item.suggestion}</p>
         <div class="card-actions">
           <button class="btn small like-btn" data-id="${item.id}">👍 ${item.likes}</button>
-          <button class="btn small delete-btn" data-id="${item.id}">🗑</button>
+          ${item.user_id === session?.user?.id ? `<button class="btn small delete-btn" data-id="${item.id}">🗑</button>` : ""}
         </div>
       `;
 
@@ -149,8 +217,5 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ==================== INITIALIZE ====================
-  if (topicSelection) {
-    topicSelection.style.display = "block";
-    showTopics();
-  }
+  updateUI();
 });
