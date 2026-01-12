@@ -1,8 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  if (!window.supabase) {
-    console.error("Supabase not loaded");
-    return;
-  }
 
   // ==================== ELEMENTS ====================
   const loginBtn = document.getElementById("login-btn");
@@ -48,55 +44,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     fetchSuggestions(topic.id);
   }
 
-  // ==================== AUTH ====================
-  if (loginBtn) {
-    loginBtn.onclick = async () => {
-      await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: { redirectTo: window.location.href }
-      });
-    };
-  }
-
-  if (logoutBtn) {
-    logoutBtn.onclick = async () => {
-      await supabase.auth.signOut();
-      location.reload();
-    };
-  }
-
-  supabase.auth.onAuthStateChange((_e, session) => updateUI(session));
-
-  let session = null;
-  try {
-    const res = await supabase.auth.getSession();
-    session = res?.data?.session ?? null;
-  } catch (e) {
-    console.error(e);
-  }
-
-  updateUI(session);
-
-  function updateUI(session) {
-    if (session?.user) {
-      const user = session.user;
-      if (userInfo) userInfo.textContent = `Logged in as ${user.email}`;
-      if (loginBtn) loginBtn.style.display = "none";
-      if (logoutBtn) logoutBtn.style.display = "inline-block";
-      if (topicSelection) {
-        topicSelection.style.display = "block";
-        showTopics();
-      }
-    } else {
-      if (userInfo) userInfo.textContent = "";
-      if (loginBtn) loginBtn.style.display = "inline-block";
-      if (logoutBtn) logoutBtn.style.display = "none";
-      if (topicSelection) topicSelection.style.display = "none";
-      if (suggestionFormContainer) suggestionFormContainer.style.display = "none";
-      if (suggestionsList) suggestionsList.innerHTML = "";
-    }
-  }
-
   // ==================== WORD COUNTER ====================
   if (suggestionInput && suggestionForm) {
     suggestionInput.addEventListener("input", () => {
@@ -117,37 +64,28 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const text = suggestionInput?.value.trim();
       if (!text) return alert("Enter a suggestion first.");
-
-      if (text.split(/\s+/).length > 150) {
-        return alert("Max 150 words.");
-      }
-
-      const { data } = await supabase.auth.getUser();
-      if (!data?.user) return alert("Please login first.");
+      if (text.split(/\s+/).length > 150) return alert("Max 150 words.");
 
       const topicId = suggestionForm.dataset.topicId;
       if (!topicId) return;
 
-const res = await fetch("/.netlify/functions/create-suggestion", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    user_id: data.user.id,
-    name: data.user.user_metadata.full_name || data.user.email,
-    email: data.user.email,
-    suggestion: text,
-    topic_id: topicId,
-  }),
-});
+      // TEMPORARY TEST USER
+      const testUser = { id: "test-user", name: "Guest", email: "guest@example.com" };
 
-const result = await res.json();
+      const res = await fetch("/.netlify/functions/create-suggestion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: testUser.id,
+          name: testUser.name,
+          email: testUser.email,
+          suggestion: text,
+          topic_id: topicId,
+        }),
+      });
 
-if (!result.success) {
-  return alert("Failed to submit suggestion");
-}
-
-
-      if (error) return alert(error.message);
+      const result = await res.json();
+      if (!result.success) return alert("Failed to submit suggestion");
 
       suggestionInput.value = "";
       if (wordCounter) wordCounter.textContent = "0/150 words";
@@ -159,20 +97,8 @@ if (!result.success) {
   async function fetchSuggestions(topicId) {
     if (!suggestionsList) return;
 
-    const { data, error } = await supabase
-      .from("suggestions")
-      .select("*")
-      .eq("topic_id", topicId)
-      .order("likes", { ascending: false })
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      suggestionsList.innerHTML = `<p style="color:red;">Failed to load suggestions.</p>`;
-      return;
-    }
-
-    const userRes = await supabase.auth.getUser();
-    const user = userRes?.data?.user;
+    const res = await fetch(`/.netlify/functions/fetch-suggestions?topic_id=${topicId}`);
+    const data = await res.json();
 
     suggestionsList.innerHTML = "";
 
@@ -185,26 +111,26 @@ if (!result.success) {
         <p>${item.suggestion}</p>
         <div class="card-actions">
           <button class="btn small like-btn" data-id="${item.id}">👍 ${item.likes}</button>
-          ${user && item.user_id === user.id
-            ? `<button class="btn small delete-btn" data-id="${item.id}">🗑</button>`
-            : ""}
+          <button class="btn small delete-btn" data-id="${item.id}">🗑</button>
         </div>
       `;
 
       suggestionsList.appendChild(card);
     });
 
-    attachEvents();
+    attachEvents(topicId);
   }
 
-  function attachEvents() {
+  function attachEvents(topicId) {
     document.querySelectorAll(".like-btn").forEach((btn) => {
       btn.onclick = async () => {
         const id = btn.dataset.id;
-        const res = await supabase.from("suggestions").select("likes").eq("id", id).single();
-        if (!res.data) return;
-        await supabase.from("suggestions").update({ likes: res.data.likes + 1 }).eq("id", id);
-        fetchSuggestions(suggestionForm.dataset.topicId);
+        await fetch("/.netlify/functions/like-suggestion", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id }),
+        });
+        fetchSuggestions(topicId);
       };
     });
 
@@ -212,11 +138,19 @@ if (!result.success) {
       btn.onclick = async () => {
         const id = btn.dataset.id;
         if (!confirm("Delete this suggestion?")) return;
-        await supabase.from("suggestions").delete().eq("id", id);
-        fetchSuggestions(suggestionForm.dataset.topicId);
+        await fetch("/.netlify/functions/delete-suggestion", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id }),
+        });
+        fetchSuggestions(topicId);
       };
     });
   }
+
+  // ==================== INITIALIZE ====================
+  if (topicSelection) {
+    topicSelection.style.display = "block";
+    showTopics();
+  }
 });
-
-
