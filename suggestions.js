@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const user = session.user;
 
-      const res = await fetch("/.netlify/functions/create-suggestion", {
+      const res = await fetch("/.netlify/functions/create-suggestions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".like-btn").forEach((btn) => {
       btn.onclick = async () => {
         const id = btn.dataset.id;
-        await fetch("/.netlify/functions/like-suggestion", {
+        await fetch("/.netlify/functions/like-suggestions", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id }),
@@ -206,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.onclick = async () => {
         const id = btn.dataset.id;
         if (!confirm("Delete this suggestion?")) return;
-        await fetch("/.netlify/functions/delete-suggestion", {
+        await fetch("/.netlify/functions/delete-suggestions", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id }),
@@ -219,3 +219,4 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==================== INITIALIZE ====================
   updateUI();
 });
+
