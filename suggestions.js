@@ -133,14 +133,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       const topicId = suggestionForm.dataset.topicId;
       if (!topicId) return;
 
-      const { error } = await supabase.from("suggestions").insert({
-        user_id: data.user.id,
-        name: data.user.user_metadata.full_name || data.user.email,
-        email: data.user.email,
-        suggestion: text,
-        topic_id: topicId,
-        likes: 0
-      });
+const res = await fetch("/.netlify/functions/create-suggestion", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    user_id: data.user.id,
+    name: data.user.user_metadata.full_name || data.user.email,
+    email: data.user.email,
+    suggestion: text,
+    topic_id: topicId,
+  }),
+});
+
+const result = await res.json();
+
+if (!result.success) {
+  return alert("Failed to submit suggestion");
+}
+
 
       if (error) return alert(error.message);
 
@@ -213,3 +223,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 });
+
