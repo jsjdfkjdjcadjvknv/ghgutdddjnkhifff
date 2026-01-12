@@ -1,62 +1,44 @@
 import { createClient } from "@supabase/supabase-js";
 
-// Initialize Supabase client with anon key (frontend safe)
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_ANON_KEY
 );
 
-// Helper to log env variables (debugging)
-console.log("SUPABASE_URL set:", !!process.env.SUPABASE_URL);
-console.log("SUPABASE_ANON_KEY set:", !!process.env.SUPABASE_ANON_KEY);
+console.log("DEBUG: SUPABASE_URL set:", !!process.env.SUPABASE_URL);
+console.log("DEBUG: SUPABASE_ANON_KEY set:", !!process.env.SUPABASE_ANON_KEY);
 
 export const handler = async (event) => {
   try {
+    console.log("DEBUG: Event body received:", event.body);
+
     const { action, provider, redirectTo } = JSON.parse(event.body || "{}");
 
-    // ===== LOGIN =====
-    if (action === "login" && provider) {
-      try {
-        const { data, error } = await supabase.auth.signInWithOAuth({
-          provider,
-          options: { redirectTo },
-        });
+    if (!action) return { statusCode: 400, body: JSON.stringify({ error: "No action" }) };
 
-        console.log("OAuth data:", data, "OAuth error:", error);
-
-        if (error) {
-          return { statusCode: 400, body: JSON.stringify({ error: error.message }) };
-        }
-
-        return { statusCode: 200, body: JSON.stringify({ url: data?.url || null }) };
-      } catch (err) {
-        console.error("Login failed:", err);
-        return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
-      }
+    if (action === "login") {
+      if (!provider) return { statusCode: 400, body: JSON.stringify({ error: "No provider" }) };
+      const { data, error } = await supabase.auth.signInWithOAuth({ provider, options: { redirectTo } });
+      console.log("DEBUG: OAuth result:", data, error);
+      if (error) return { statusCode: 400, body: JSON.stringify({ error: error.message }) };
+      return { statusCode: 200, body: JSON.stringify({ url: data?.url || null }) };
     }
 
-    // ===== LOGOUT =====
     if (action === "logout") {
-      // Logout is frontend-only since Supabase cookies aren't set in serverless
+      console.log("DEBUG: Logout requested");
       return { statusCode: 200, body: JSON.stringify({ success: true }) };
     }
 
-    // ===== GET SESSION =====
     if (action === "getSession") {
-      try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        if (error) throw error;
-        return { statusCode: 200, body: JSON.stringify({ user: session?.user || null }) };
-      } catch (err) {
-        console.error("getSession failed:", err);
-        return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
-      }
+      const { data: { session }, error } = await supabase.auth.getSession();
+      console.log("DEBUG: Session data:", session, error);
+      if (error) return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
+      return { statusCode: 200, body: JSON.stringify({ user: session?.user || null }) };
     }
 
-    // ===== INVALID ACTION =====
     return { statusCode: 400, body: JSON.stringify({ error: "Invalid action" }) };
   } catch (err) {
-    console.error("Auth handler crashed:", err);
+    console.error("DEBUG: Auth handler crashed:", err);
     return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
   }
 };
