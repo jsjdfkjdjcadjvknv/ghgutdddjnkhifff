@@ -28,7 +28,7 @@ export const handler = async (event) => {
       return { statusCode: 200, body: JSON.stringify({ user: session?.user }) };
     }
 
-    return { statusCode: 400, body: "Invalid action" };
+    return { statusCode: 400, body: JSON.stringify({ error: "Invalid action" }) };
   } catch (err) {
     console.error(err);
     return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
