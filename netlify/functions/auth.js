@@ -15,10 +15,7 @@ export const handler = async (event) => {
         options: { redirectTo },
       });
       if (error) throw error;
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ url: data?.url }),
-      };
+      return { statusCode: 200, body: JSON.stringify({ url: data?.url }) };
     }
 
     if (action === "logout") {
