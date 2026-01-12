@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY // public anon key
+  process.env.SUPABASE_ANON_KEY
 );
 
 export const handler = async (event) => {
@@ -10,16 +10,25 @@ export const handler = async (event) => {
     const { action, provider, redirectTo } = JSON.parse(event.body || "{}");
 
     if (action === "login" && provider) {
-      const { data, error } = supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider,
         options: { redirectTo },
       });
       if (error) throw error;
-      return { statusCode: 200, body: JSON.stringify({ url: data?.url }) };
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ url: data?.url }),
+      };
     }
 
     if (action === "logout") {
       return { statusCode: 200, body: JSON.stringify({ success: true }) };
+    }
+
+    if (action === "getSession") {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error) throw error;
+      return { statusCode: 200, body: JSON.stringify({ user: session?.user }) };
     }
 
     return { statusCode: 400, body: "Invalid action" };
