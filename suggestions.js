@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ==================== SUPABASE ====================
   const SUPABASE_URL = "https://gsifcmkfoaayngpuipzc.supabase.co";
-  const SUPABASE_ANON_KEY = "YOUR_PUBLIC_ANON_KEY_HERE";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzaWZjbWtmb2FheW5ncHVpcHpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTk1OTksImV4cCI6MjA3MTg3NTU5OX0.JLj0KAYd4882zaIlOGrzWxLAVwUhY2LGA4ggVLbhbv4";
 
   const supabase = window.supabase.createClient(
     SUPABASE_URL,
@@ -183,3 +183,4 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
 });
+
